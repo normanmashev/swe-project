@@ -39,7 +39,7 @@ public class LoginController {
             return ResponseEntity.badRequest().body("Incorrect Password");
         }
 
-        Optional<Employee> employee = employeeRepository.findbyUsername(username);
+        Optional<Employee> employee = employeeRepository.findByUsername(username);
         if (employee.isPresent()) {
             if (passwordEncoder.matches(password, employee.get().getPassword())) {
                 return ResponseEntity.ok(employee.get().getRole());
@@ -63,7 +63,7 @@ public class LoginController {
         if (guestRepository.findByUsername(username).isPresent()) {
             return ResponseEntity.badRequest().body("Username is already taken");
         }
-        if (employeeRepository.findbyUsername(username).isPresent()) {
+        if (employeeRepository.findByUsername(username).isPresent()) {
             return ResponseEntity.badRequest().body("Username is already taken");
         }
         if (role == "guest") {
