@@ -1,12 +1,9 @@
-package com.groupproject.hotel_chain.controller;
+package com.groupproject.hotel_chain.controllers;
 
-import com.groupproject.hotel_chain.model.Hotel;
+import com.groupproject.hotel_chain.models.Hotel;
 import com.groupproject.hotel_chain.repository.HotelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
