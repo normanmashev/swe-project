@@ -65,7 +65,7 @@ public class Room {
         this.occupied = occupied;
     }
 
-    public Room(int id, int number, int floor, Room_Type room_type) {
+    public Room(int number, int floor, Room_Type room_type) {
         this.id = id;
         this.number = number;
         this.floor = floor;
@@ -73,8 +73,7 @@ public class Room {
         this.occupied = false;
     }
 
-    public Room(int id, int number, int floor, Room_Type room_type, boolean occupied) {
-        this.id = id;
+    public Room(int number, int floor, Room_Type room_type, boolean occupied) {
         this.number = number;
         this.floor = floor;
         this.room_type = room_type;
