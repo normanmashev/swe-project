@@ -1,4 +1,4 @@
-package com.groupproject.hotel_chain.model;
+package com.groupproject.hotel_chain.models;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -59,6 +59,8 @@ public class Hotel {
     public void setPhone(List<String> phone) {
         this.phone = phone;
     }
+
+    public Set<Room_Type> getRoomTypes() { return room_types; }
 
     public Hotel(String name, String address, List<String> phone) {
         this.name = name;

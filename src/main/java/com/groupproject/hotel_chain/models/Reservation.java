@@ -1,4 +1,4 @@
-package com.groupproject.hotel_chain.model;
+package com.groupproject.hotel_chain.models;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -76,6 +76,12 @@ public class Reservation {
         this.checkin_date = checkin_date;
         this.checkout_date = checkout_date;
         this.room_type = room_type;
+        this.guest = guest;
+    }
+
+    public Reservation(Date checkin_date, Date checkout_date, Guest guest) {
+        this.checkin_date = checkin_date;
+        this.checkout_date = checkout_date;
         this.guest = guest;
     }
 }

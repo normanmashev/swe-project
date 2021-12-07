@@ -1,4 +1,4 @@
-package com.groupproject.hotel_chain.model;
+package com.groupproject.hotel_chain.models;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
