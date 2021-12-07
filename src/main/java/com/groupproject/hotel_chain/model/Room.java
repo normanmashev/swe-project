@@ -54,8 +54,7 @@ public class Room {
     public Room() {
     }
 
-    public Room(int id, int number, int floor, Room_Type room_type) {
-        this.id = id;
+    public Room(int number, int floor, Room_Type room_type) {
         this.number = number;
         this.floor = floor;
         this.room_type = room_type;

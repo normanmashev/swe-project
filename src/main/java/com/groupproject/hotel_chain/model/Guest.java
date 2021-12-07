@@ -75,8 +75,7 @@ public class Guest {
         this.mobile_phone = mobile_phone;
     }
 
-    public Guest(int guest_id, Uid_type identification_type, String identification_number, String address, String home_phone, String mobile_phone) {
-        this.guest_id = guest_id;
+    public Guest(Uid_type identification_type, String identification_number, String address, String home_phone, String mobile_phone) {
         this.identification_type = identification_type;
         this.identification_number = identification_number;
         this.address = address;

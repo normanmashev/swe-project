@@ -60,8 +60,7 @@ public class Hotel {
         this.phone = phone;
     }
 
-    public Hotel(int hotel_id, String name, String address, List<String> phone) {
-        this.hotel_id = hotel_id;
+    public Hotel(String name, String address, List<String> phone) {
         this.name = name;
         this.address = address;
         this.phone = phone;

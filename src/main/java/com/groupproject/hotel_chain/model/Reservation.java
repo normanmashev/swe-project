@@ -72,8 +72,7 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(int reservation_id, Date checkin_date, Date checkout_date, Room_Type room_type, Guest guest) {
-        this.reservation_id = reservation_id;
+    public Reservation(Date checkin_date, Date checkout_date, Room_Type room_type, Guest guest) {
         this.checkin_date = checkin_date;
         this.checkout_date = checkout_date;
         this.room_type = room_type;

@@ -10,6 +10,6 @@ public class DeskClerk extends Employee{
     }
 
     public DeskClerk(int employee_id, String name, String surname) {
-        super(employee_id, name, surname);
+        super(name, surname);
     }
 }

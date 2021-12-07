@@ -9,7 +9,7 @@ public class Manager extends Employee{
     public Manager() {
     }
 
-    public Manager(int employee_id, String name, String surname) {
-        super(employee_id, name, surname);
+    public Manager(String name, String surname) {
+        super(name, surname);
     }
 }
