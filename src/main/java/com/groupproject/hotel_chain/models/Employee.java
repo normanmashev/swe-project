@@ -9,7 +9,23 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int employee_id;
 
+    @Column
+    private String username;
+
+    @Column
+    private String password;
+
     private String name, surname;
+
+    private String role;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public int getEmployee_id() {
         return employee_id;
@@ -38,8 +54,27 @@ public class Employee {
         this.surname = surname;
     }
 
-    public Employee(String name, String surname) {
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Employee(String username, String password, String name, String surname, String role) {
+        this.username = username;
+        this.password = password;
         this.name = name;
         this.surname = surname;
+        this.role = role;
     }
 }

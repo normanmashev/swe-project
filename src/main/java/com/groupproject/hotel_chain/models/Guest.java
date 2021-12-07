@@ -15,7 +15,29 @@ public class Guest {
     @Column
     private String identification_number;
 
-    @Column String username;
+    @Column
+    private String username;
+
+    @Column
+    private String password;
+
+    private String name, surname;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     @Column
     private String address;
@@ -77,10 +99,20 @@ public class Guest {
         this.mobile_phone = mobile_phone;
     }
 
-    public Guest(String username, Uid_type identification_type, String identification_number, String address, String home_phone, String mobile_phone) {
-        this.username = username;
+    public Guest(String username, String password,
+                 Uid_type identification_type,
+                 String identification_number,
+                 String name,
+                 String surname,
+                 String address,
+                 String home_phone,
+                 String mobile_phone) {
         this.identification_type = identification_type;
         this.identification_number = identification_number;
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.surname = surname;
         this.address = address;
         this.home_phone = home_phone;
         this.mobile_phone = mobile_phone;
