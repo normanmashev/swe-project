@@ -66,7 +66,6 @@ public class Room {
     }
 
     public Room(int number, int floor, Room_Type room_type) {
-        this.id = id;
         this.number = number;
         this.floor = floor;
         this.room_type = room_type;
