@@ -38,10 +38,11 @@ public class DeskClerkController {
 
         for (Reservation reservation : allReservations) {
             for (Room_Type roomType : hotelRoomTypes) {
-                if (roomType.getRoom_type_id() == reservation.getRoom_type().getRoom_type_id()) {
-                    reservationsForHotel.add(reservation);
-                    break;
+                if (roomType.getRoom_type_id() != reservation.getRoom_type().getRoom_type_id()) {
+                    continue;
                 }
+                reservationsForHotel.add(reservation);
+                break;
             }
         }
         return reservationsForHotel;
@@ -54,14 +55,15 @@ public class DeskClerkController {
         Set <Room_Type> roomTypes = hotel.getRoomTypes();
 
         for (Room_Type roomType : roomTypes) {
-            if (roomType.getRoom_type_id() == reservation.getRoom_type().getRoom_type_id()) {
-                Set <Reservation> roomReservations = roomType.getReservations();
-                roomReservations.removeIf(roomReservation ->
-                    roomReservation.getReservation_id() == reservation.getReservation_id()
-                );
-                reservationRepository.delete(reservation);
-                break;
+            if (roomType.getRoom_type_id() != reservation.getRoom_type().getRoom_type_id()) {
+                continue;
             }
+            Set <Reservation> roomReservations = roomType.getReservations();
+            roomReservations.removeIf(roomReservation ->
+                roomReservation.getReservation_id() == reservation.getReservation_id()
+            );
+            reservationRepository.delete(reservation);
+            break;
         }
         hotelRepository.save(hotel);
     }
@@ -72,7 +74,8 @@ public class DeskClerkController {
             @RequestParam int hotel_id,
             @RequestParam String check_in_date,
             @RequestParam String check_out_date,
-            @RequestParam int room_type_id) throws ParseException {
+            @RequestParam int room_type_id
+    ) throws ParseException {
         Hotel hotel = hotelRepository.findById(hotel_id).orElseThrow();
         Set<Room_Type> roomTypes = hotel.getRoomTypes();
         Guest currentGuest = guestRepository.findByUsername(username).orElseThrow();
@@ -85,11 +88,12 @@ public class DeskClerkController {
         );
 
         for (Room_Type roomType : roomTypes) {
-            if (roomType.getRoom_type_id() == room_type_id) {
-                roomType.getReservations().add(reservation);
-                reservation.setRoom_type(roomType);
-                break;
+            if (roomType.getRoom_type_id() != room_type_id) {
+                continue;
             }
+            roomType.getReservations().add(reservation);
+            reservation.setRoom_type(roomType);
+            break;
         }
 
         guestRepository.save(currentGuest);
@@ -97,6 +101,46 @@ public class DeskClerkController {
         reservationRepository.save(reservation);
 
         return reservation.getReservation_id();
+    }
+
+    @PostMapping("/allReservations/{reservation_id}/edit")
+    public int editReservation(
+            @PathVariable int reservation_id,
+            @RequestParam int hotel_id,
+            @RequestParam(required = false) String check_in_date,
+            @RequestParam(required = false) String check_out_date,
+            @RequestParam(required = false) Integer room_type_id
+    ) throws ParseException {
+        Reservation reservation = reservationRepository.findById(reservation_id).orElseThrow();
+        Hotel hotel = hotelRepository.findById(hotel_id).orElseThrow();
+        Set<Room_Type> roomTypes = hotel.getRoomTypes();
+
+        if (check_in_date != null) {
+            reservation.setCheckin_date(
+                new SimpleDateFormat("yyyy-MM-dd").parse(check_in_date)
+            );
+        }
+
+        if (check_out_date != null) {
+            reservation.setCheckout_date(
+                new SimpleDateFormat("yyyy-MM-dd").parse(check_out_date)
+            );
+        }
+
+        if (room_type_id != null) {
+            for (Room_Type roomType : roomTypes) {
+                if (!room_type_id.equals(roomType.getRoom_type_id())) {
+                    continue;
+                }
+                reservation.setRoom_type(roomType);
+                break;
+            }
+        }
+
+        reservationRepository.save(reservation);
+        hotelRepository.save(hotel);
+
+        return reservation_id;
     }
 }
 
