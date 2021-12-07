@@ -19,8 +19,8 @@ public class Reservation {
     private Date checkout_date;
 
     @ManyToOne
-    @JoinColumn(name = "room_type_id")
-    private Room_Type room_type;
+    @JoinColumn(name = "room")
+    private Room room;
 
     @ManyToOne
     @JoinColumn(name = "guest_id")
@@ -53,14 +53,6 @@ public class Reservation {
         this.checkout_date = checkout_date;
     }
 
-    public Room_Type getRoom_type() {
-        return room_type;
-    }
-
-    public void setRoom_type(Room_Type room_type) {
-        this.room_type = room_type;
-    }
-
     public Guest getGuest() {
         return guest;
     }
@@ -72,10 +64,10 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(Date checkin_date, Date checkout_date, Room_Type room_type, Guest guest) {
+    public Reservation(Date checkin_date, Date checkout_date, Room room, Guest guest) {
         this.checkin_date = checkin_date;
         this.checkout_date = checkout_date;
-        this.room_type = room_type;
+        this.room = room;
         this.guest = guest;
     }
 

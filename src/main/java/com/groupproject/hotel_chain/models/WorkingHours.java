@@ -11,17 +11,17 @@ public class WorkingHours {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    private Time start;
-    private Time end;
+    private Time start_time;
+    private Time end_time;
     private Date date;
 
-    @ManyToOne
-    @JoinColumn(name = "employee_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "employee")
     private Employee employee;
 
     public WorkingHours(Time start, Time end, Date date, Employee employee) {
-        this.start = start;
-        this.end = end;
+        this.start_time = start;
+        this.end_time = end;
         this.date = date;
         this.employee = employee;
     }
@@ -34,20 +34,20 @@ public class WorkingHours {
         this.id = id;
     }
 
-    public Time getStart() {
-        return start;
+    public Time getStart_time() {
+        return start_time;
     }
 
-    public void setStart(Time start) {
-        this.start = start;
+    public void setStart_time(Time start_time) {
+        this.start_time = start_time;
     }
 
-    public Time getEnd() {
-        return end;
+    public Time getEnd_time() {
+        return end_time;
     }
 
-    public void setEnd(Time end) {
-        this.end = end;
+    public void setEnd_time(Time end_time) {
+        this.end_time = end_time;
     }
 
     public Date getDate() {
