@@ -18,8 +18,8 @@ public class Hotel {
     @Column
     private String address;
 
-    @Column
-    private String phone;
+    @ElementCollection
+    private List<String> phone;
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
     private Set<Room_Type> room_types = new HashSet<>();
@@ -52,15 +52,15 @@ public class Hotel {
         this.address = address;
     }
 
-    public String getPhone() {
+    public List<String> getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
+    public void setPhone(List<String> phone) {
         this.phone = phone;
     }
 
-    public Hotel(int hotel_id, String name, String address, String phone) {
+    public Hotel(int hotel_id, String name, String address, List<String> phone) {
         this.hotel_id = hotel_id;
         this.name = name;
         this.address = address;
