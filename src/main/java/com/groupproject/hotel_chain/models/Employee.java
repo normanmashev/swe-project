@@ -1,6 +1,8 @@
 package com.groupproject.hotel_chain.models;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "employee")
@@ -18,6 +20,9 @@ public class Employee {
     private String name, surname;
 
     private String role;
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    private Set<WorkingHours> workingHours = new HashSet<>();
 
     public String getRole() {
         return role;
