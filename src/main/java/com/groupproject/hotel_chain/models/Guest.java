@@ -1,4 +1,4 @@
-package com.groupproject.hotel_chain.model;
+package com.groupproject.hotel_chain.models;
 
 import javax.persistence.*;
 
@@ -14,6 +14,8 @@ public class Guest {
 
     @Column
     private String identification_number;
+
+    @Column String username;
 
     @Column
     private String address;
@@ -75,8 +77,8 @@ public class Guest {
         this.mobile_phone = mobile_phone;
     }
 
-    public Guest(int guest_id, Uid_type identification_type, String identification_number, String address, String home_phone, String mobile_phone) {
-        this.guest_id = guest_id;
+    public Guest(String username, Uid_type identification_type, String identification_number, String address, String home_phone, String mobile_phone) {
+        this.username = username;
         this.identification_type = identification_type;
         this.identification_number = identification_number;
         this.address = address;
