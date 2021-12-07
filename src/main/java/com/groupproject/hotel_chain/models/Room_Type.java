@@ -66,6 +66,8 @@ public class Room_Type {
         this.hotel = hotel;
     }
 
+    public Set<Room> getRooms() { return roomSet; }
+
     public Room_Type(int room_type_id, int size, int capacity, Hotel hotel) {
         this.room_type_id = room_type_id;
         this.size = size;
