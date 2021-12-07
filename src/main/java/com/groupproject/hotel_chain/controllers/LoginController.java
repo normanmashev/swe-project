@@ -57,7 +57,7 @@ public class LoginController {
                                @RequestParam(required = true) String role,
                                @RequestParam(required = false) String address,
                                @RequestParam(required = false) String home_phone,
-                               @RequestParam(required = false) String moble_phone,
+                               @RequestParam(required = false) String mobile_phone,
                                @RequestParam(required = false) Uid_type identification_type,
                                @RequestParam(required = false) String number) {
         if (guestRepository.findByUsername(username).isPresent()) {
@@ -75,7 +75,7 @@ public class LoginController {
                     surname,
                     address,
                     home_phone,
-                    moble_phone);
+                    mobile_phone);
             guestRepository.save(guest);
         } else {
             Employee employee = new Employee(username,

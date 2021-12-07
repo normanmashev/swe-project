@@ -43,6 +43,14 @@ public class Employee {
         this.employee_id = employee_id;
     }
 
+    public Set<WorkingHours> getWorkingHours() {
+        return workingHours;
+    }
+
+    public void setWorkingHours(Set<WorkingHours> workingHours) {
+        this.workingHours = workingHours;
+    }
+
     public String getName() {
         return name;
     }
