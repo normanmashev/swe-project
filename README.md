@@ -32,4 +32,4 @@
 | Description | Link example | Params | Method | What returns |
 |-------------|--------------|----------|:------:|------------|
 |  Add a new room type in specific hotel | `/api/roomtype/add/?size={}&capacity={}&hotel_id={}`  Example: `/api/roomtype/add/?size=10&capacity=2&hotel_id=4` | int size,  int capacity,  int hotel_id  | `POST` | Created room type id or throws if no such hotel with hotel_id |
-| Get all room types for specific hotel | `/api/roomtype/get/all/{id}`  Example: `/api/roomtype/get/all/4` | int id - hotel_id | `GET` | List of all Room_Type or throws if no such hotel with hotel id |
+| Get all room types for specific hotel | `/api/roomtype/get/all/{id}`  Example: `/api/roomtype/get/all/4` | int id - hotel_id | `GET` | List of all Room_Type in hotel or throws if no such hotel with hotel id |
