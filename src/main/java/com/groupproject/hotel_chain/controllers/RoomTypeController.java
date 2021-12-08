@@ -31,6 +31,7 @@ public class RoomTypeController {
         Room_Type room_type = new Room_Type(size, capacity, hotel);
         hotel.getRoomTypes().add(room_type);
         roomTypeRepository.save(room_type);
+        hotelRepository.save(hotel);
         return ResponseEntity.ok(room_type.getRoom_type_id());
     }
 
@@ -47,6 +48,8 @@ public class RoomTypeController {
         room_type.setSize(size);
         room_type.setHotel(hotel2);
         roomTypeRepository.save(room_type);
+        hotelRepository.save(hotel1);
+        hotelRepository.save(hotel2);
         return ResponseEntity.ok("");
     }
 
@@ -56,6 +59,7 @@ public class RoomTypeController {
         Hotel hotel = room_type.getHotel();
         hotel.getRoomTypes().remove(room_type);
         roomTypeRepository.delete(room_type);
+        hotelRepository.save(hotel);
         return ResponseEntity.ok("");
     }
 }
