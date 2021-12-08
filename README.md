@@ -17,6 +17,7 @@
 | Get specific hotel | `/api/hotel/get/{id}`  Example: `/api/hotel/get/2`(отель с айдишкой 2) | int id required| GET | one Hotel object |
 | Edit a specific hotel | `/api/hotel/edit/{id}?name={}&address={}&phones={}&phones={}&phones{}`  Example: `/api/hotel/edit/2?name=Rixos&address=Moscow&phones=123&phones=345`| int id,  String name,  String address,  List\[String\] phones | POST | Empty or throws exception if no such hotel with id |
 | Delete a specific hotel | `/api/hotel/delete/{id}`  Example: `/api/hotel/delete/2` | int id | POST | Empty or throws if no such hotel with id |
+| Add a new hotel | `/api/hotel/add?name={}&address={}&phones={}&phones={}&phones={}`  Example: `/api/hotel/add?name=Moscow Taganskaya&address=Metro Taganskaya&phones=123&phones=321&phones=421` | String name,  String address,  List\[String\] phones | POST | id of new created hotel |
 
 ## Login Controller
 | Description | Link example | Params | Method | What returns |
