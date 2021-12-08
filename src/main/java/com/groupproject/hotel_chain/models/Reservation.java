@@ -22,6 +22,14 @@ public class Reservation {
     @JoinColumn(name = "room")
     private Room room;
 
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
     @ManyToOne
     @JoinColumn(name = "guest_id")
     private Guest guest;

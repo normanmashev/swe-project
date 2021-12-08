@@ -4,7 +4,9 @@ import com.groupproject.hotel_chain.models.*;
 import com.groupproject.hotel_chain.repository.HotelRepository;
 import com.groupproject.hotel_chain.repository.ReservationRepository;
 import com.groupproject.hotel_chain.repository.GuestRepository;
+import com.groupproject.hotel_chain.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +18,8 @@ import java.util.List;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/api/deskClerk")
-public class DeskClerkController {
+@RequestMapping("/api/reservation")
+public class ReservationController {
     @Autowired
     private HotelRepository hotelRepository;
 
@@ -26,6 +28,9 @@ public class DeskClerkController {
 
     @Autowired
     private GuestRepository guestRepository;
+
+    @Autowired
+    RoomRepository roomRepository;
 
     @GetMapping("/allReservations")
     public Set<Reservation> showAllReservations(@RequestParam(required = true) int hotel_id) {
@@ -38,7 +43,7 @@ public class DeskClerkController {
 
         for (Reservation reservation : allReservations) {
             for (Room_Type roomType : hotelRoomTypes) {
-                if (roomType.getRoom_type_id() != reservation.getRoom_type().getRoom_type_id()) {
+                if (roomType.getRoom_type_id() != reservation.getRoom().getRoom_type().getRoom_type_id()) {
                     continue;
                 }
                 reservationsForHotel.add(reservation);
@@ -48,28 +53,65 @@ public class DeskClerkController {
         return reservationsForHotel;
     }
 
-    @PostMapping("/allReservations/{reservation_id}/delete")
+    @PostMapping("/{reservation_id}/delete")
     public void deleteReservation(@PathVariable(required = true) int reservation_id, @RequestParam(required = true) int hotel_id) {
         Reservation reservation = reservationRepository.findById(reservation_id).orElseThrow();
         Hotel hotel = hotelRepository.findById(hotel_id).orElseThrow();
         Set <Room_Type> roomTypes = hotel.getRoomTypes();
 
         for (Room_Type roomType : roomTypes) {
-            if (roomType.getRoom_type_id() != reservation.getRoom_type().getRoom_type_id()) {
+            if (roomType.getRoom_type_id() != reservation.getRoom().getRoom_type().getRoom_type_id()) {
                 continue;
             }
-            Set <Reservation> roomReservations = roomType.getReservations();
-            roomReservations.removeIf(roomReservation ->
-                roomReservation.getReservation_id() == reservation.getReservation_id()
-            );
+            for (Room room : roomType.getRooms()) {
+                Set<Reservation> roomReservations = room.getReservations();
+                roomReservations.removeIf(roomReservation ->
+                        roomReservation.getReservation_id() == reservation.getReservation_id()
+                );
+            }
             reservationRepository.delete(reservation);
             break;
         }
         hotelRepository.save(hotel);
     }
 
-    @PostMapping("/allReservations/create")
-    public int createReservation(
+    public static Date max(Date d1, Date d2) {
+        if (d1 == null && d2 == null) return null;
+        if (d1 == null) return d2;
+        if (d2 == null) return d1;
+        return (d1.after(d2)) ? d1 : d2;
+    }
+
+    public static Date min(Date d1, Date d2) {
+        if (d1 == null && d2 == null) return null;
+        if (d1 == null) return d2;
+        if (d2 == null) return d1;
+        return (d1.before(d2)) ? d1 : d2;
+    }
+
+    public Room findRoom(Date checkin_date,
+                         Date checkout_date,
+                         int room_type_id) {
+        List<Room> rooms = roomRepository.findAll();
+        for (Room room : rooms) {
+            if (room.getRoom_type().getRoom_type_id() != room_type_id)
+                continue;
+            boolean reserved = false;
+            for (Reservation reservation : room.getReservations()) {
+                if (max(reservation.getCheckin_date(), checkin_date).before(min(reservation.getCheckout_date(), checkout_date))) {
+                    reserved = true;
+                    break;
+                }
+            }
+            if (!reserved) {
+                return room;
+            }
+        }
+        return null;
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<?> createReservation(
             @RequestParam String username,
             @RequestParam int hotel_id,
             @RequestParam String check_in_date,
@@ -91,8 +133,14 @@ public class DeskClerkController {
             if (roomType.getRoom_type_id() != room_type_id) {
                 continue;
             }
-            roomType.getReservations().add(reservation);
-            reservation.setRoom_type(roomType);
+            Room room = findRoom(new SimpleDateFormat("yyyy-MM-dd").parse(check_in_date),
+                    new SimpleDateFormat("yyyy-MM-dd").parse(check_out_date),
+                    roomType.getRoom_type_id());
+            if (room == null) {
+                return ResponseEntity.badRequest().body("no available rooms");
+            }
+            room.getReservations().add(reservation);
+            reservation.setRoom(room);
             break;
         }
 
@@ -100,11 +148,11 @@ public class DeskClerkController {
         hotelRepository.save(hotel);
         reservationRepository.save(reservation);
 
-        return reservation.getReservation_id();
+        return ResponseEntity.ok("");
     }
 
-    @PostMapping("/allReservations/{reservation_id}/edit")
-    public int editReservation(
+    @PostMapping("/{reservation_id}/edit")
+    public ResponseEntity<?> editReservation(
             @PathVariable int reservation_id,
             @RequestParam int hotel_id,
             @RequestParam(required = false) String check_in_date,
@@ -132,7 +180,13 @@ public class DeskClerkController {
                 if (!room_type_id.equals(roomType.getRoom_type_id())) {
                     continue;
                 }
-                reservation.setRoom_type(roomType);
+                Room room = findRoom(new SimpleDateFormat("yyyy-MM-dd").parse(check_in_date),
+                        new SimpleDateFormat("yyyy-MM-dd").parse(check_out_date),
+                        roomType.getRoom_type_id());
+                if (room == null) {
+                    return ResponseEntity.badRequest().body("No available rooms");
+                }
+                reservation.setRoom(room);
                 break;
             }
         }
@@ -140,7 +194,7 @@ public class DeskClerkController {
         reservationRepository.save(reservation);
         hotelRepository.save(hotel);
 
-        return reservation_id;
+        return ResponseEntity.ok("");
     }
 }
 
