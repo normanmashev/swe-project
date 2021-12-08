@@ -24,14 +24,7 @@ public class Room_Type {
     @OneToMany(mappedBy = "room_type", cascade = CascadeType.ALL)
     private Set<Room> roomSet = new HashSet<>();
 
-    @OneToMany(mappedBy = "room_type", cascade = CascadeType.ALL)
-    private Set<Reservation> reservations = new HashSet<>();
-
     public Room_Type() {
-    }
-
-    public Set<Reservation> getReservations() {
-        return reservations;
     }
 
     public int getRoom_type_id() {

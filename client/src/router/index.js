@@ -44,6 +44,14 @@ const routes = [
 		},
 	},
 	{
+		path: "/register",
+		name: "Register",
+		component: () => import("@/views/Register"),
+		meta: {
+			title: "Registration",
+		},
+	},
+	{
 		path: "/forbidden",
 		name: "ErrorPage404",
 		component: () => import("@/views/ErrorPage"),

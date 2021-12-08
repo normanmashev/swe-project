@@ -5,17 +5,19 @@
 				<h5 class="text-h5">Authorization</h5>
 				<v-divider width="100px" class="my-3"></v-divider>
 				<p class="grey--text subtitle-1 ma-0">
-					<router-link to="/register"> Sign up </router-link>
+					<router-link class="text-decoration-none" to="/register">
+						Sign up
+					</router-link>
 					<span>if you don't have an account yet</span>
 				</p>
 			</v-card-title>
 			<v-card-text class="d-flex flex-column">
 				<v-text-field
-					v-model="data.email"
+					v-model="data.username"
 					outlined
 					dense
-					label="E-mail"
-					:rules="rules.email"
+					label="Username"
+					:rules="rules.required"
 				></v-text-field>
 				<v-text-field
 					v-model="data.password"
@@ -23,7 +25,7 @@
 					outlined
 					dense
 					label="Password"
-					:rules="rules.email"
+					:rules="rules.required"
 				></v-text-field>
 			</v-card-text>
 
@@ -35,27 +37,26 @@
 </template>
 
 <script>
-import { rules } from "@/utils/helpers";
+import { RULES } from "@/utils/helpers";
 
 export default {
 	name: "LoginForm",
 
 	data() {
 		return {
-			rules,
+			rules: RULES,
 			data: {
-				email: "",
+				username: "",
 				password: "",
 			},
 		};
 	},
 
-  methods: {
-
-    handleSubmit() {
-      this.$store.dispatch('user/login');
-    }
-  }
+	methods: {
+		handleSubmit() {
+			this.$store.dispatch("user/login");
+		},
+	},
 };
 </script>
 

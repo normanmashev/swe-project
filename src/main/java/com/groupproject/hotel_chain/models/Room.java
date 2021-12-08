@@ -1,6 +1,8 @@
 package com.groupproject.hotel_chain.models;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "room")
@@ -17,6 +19,26 @@ public class Room {
 
     @Column(name = "occupied", nullable = false)
     private boolean occupied;
+
+    @OneToMany
+    @JoinColumn(name = "reservation")
+    Set<Reservation> reservations = new HashSet<>();
+
+    public boolean isOccupied() {
+        return occupied;
+    }
+
+    public void setOccupied(boolean occupied) {
+        this.occupied = occupied;
+    }
+
+    public Set<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Set<Reservation> reservations) {
+        this.reservations = reservations;
+    }
 
     @ManyToOne
     @JoinColumn(name = "room_type_id")
