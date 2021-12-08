@@ -51,3 +51,4 @@
 |-------------|--------------|----------|:------:|------------|
 | Get a list of all **WorkingHours** of all employees | `/api/workinghours/schedules` | | `GET` | List of all **WorkingHours** |
 | Get a list of all **WorkingHours** for specific employee | `/api/workinghours/schedule?employee_id={}` Example: `/api/workinghours/schedule?employee_id=3` | int employee_id | `GET` | List of **WorkingHours** for user with id = employee_id or throws if no such employee with emlpoyee_id | 
+| Edit (Not ready yet) | `api/workinghours/edit` | hzhzhz | `POST` | hzhzhz |
