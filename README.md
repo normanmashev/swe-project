@@ -1,6 +1,10 @@
 # documentation
 По дефлоту все параметры/аргументы required. Если написано required = false, то опционально
 
+## Main page controller
+| Description | Link example | Params | Method | What returns |
+|-------------|--------------|----------|:------:|------------|
+| Get list of all hotels | `/` | | `GET` | List of all **Hotel** object |
 
 ## Reservation Controller
 | Description | Link example | Params | Method | What returns |
