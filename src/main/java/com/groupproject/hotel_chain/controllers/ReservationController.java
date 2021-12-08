@@ -54,7 +54,7 @@ public class ReservationController {
     }
 
     @PostMapping("/{reservation_id}/delete")
-    public void deleteReservation(@PathVariable(required = true) int reservation_id, @RequestParam(required = true) int hotel_id) {
+    public ResponseEntity<?> deleteReservation(@PathVariable(required = true) int reservation_id, @RequestParam(required = true) int hotel_id) {
         Reservation reservation = reservationRepository.findById(reservation_id).orElseThrow();
         Hotel hotel = hotelRepository.findById(hotel_id).orElseThrow();
         Set <Room_Type> roomTypes = hotel.getRoomTypes();
@@ -73,6 +73,7 @@ public class ReservationController {
             break;
         }
         hotelRepository.save(hotel);
+        return ResponseEntity.ok("");
     }
 
     public static Date max(Date d1, Date d2) {
@@ -148,7 +149,7 @@ public class ReservationController {
         hotelRepository.save(hotel);
         reservationRepository.save(reservation);
 
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok(reservation.getReservation_id());
     }
 
     @PostMapping("/{reservation_id}/edit")
