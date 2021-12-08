@@ -36,6 +36,33 @@ const routes = [
 		],
 	},
 	{
+		path: "/profile",
+		component: () => import("@/views/Profile"),
+		redirect: to => {
+			const role = "";
+			if (!role) return "/profile/guest";
+			else return "/profile/manager";
+		},
+		children: [
+			{
+				path: "guest",
+				name: "ProfileGuest",
+				component: () => import("@/views/ProfileGuest"),
+				meta: {
+					title: "Profile | Guest",
+				},
+			},
+			{
+				path: "manager",
+				name: "ProfileManager",
+				component: () => import("@/views/ProfileManager"),
+				meta: {
+					title: "Profile | Manager",
+				},
+			},
+		],
+	},
+	{
 		path: "/login",
 		name: "Login",
 		component: () => import("@/views/Login"),

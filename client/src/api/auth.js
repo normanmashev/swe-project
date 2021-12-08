@@ -1,8 +1,8 @@
 import request from "./request";
 
-export const Login = () =>
+export const SignIn = () =>
 	request({
-		url: "/login",
+		url: "/signin",
 		method: "post",
 	})
 		.then(res => res.data)
@@ -10,9 +10,28 @@ export const Login = () =>
 			throw e;
 		});
 
-export const Register = () =>
+export const SignUpGuest = () =>
 	request({
-		url: "/register",
+		url: "/signup/guest",
+		method: "post",
+	})
+		.then(res => res.data)
+		.catch(e => {
+			throw e;
+		});
+
+export const SignUpManager = () =>
+	request({
+		url: "/signup/manager",
+		method: "post",
+	})
+		.then(res => res.data)
+		.catch(e => {
+			throw e;
+		});
+export const SignUpEmployee = () =>
+	request({
+		url: "/signup/employee",
 		method: "post",
 	})
 		.then(res => res.data)
