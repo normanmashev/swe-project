@@ -15,4 +15,4 @@
 ## Login Controller
 | Description | Link example | Params | Method | What returns |
 |-------------|--------------|----------|:------:|------------|
-| Signup a user | `/signin?username=justadlet&password=helloworld&name=Adlet&surname=Zeineken&address=Moscow&home_phone=8 707 912 03 76&mobile_phone=8 901 507 91 25&identification_type=PASSPORT` | String username  String password String name String surname  String address  String home_phone String mobile_phone  String identification_type - **PASSPORT** or **DRIVING_LICENSE**  String number| POST | "Success" or "Username is already taken" |  
+| Signup a user | `/signin?username=justadlet&password=helloworld&name=Adlet&surname=Zeineken&address=Moscow&home_phone=8 707 912 03 76&mobile_phone=8 901 507 91 25&identification_type=PASSPORT`  `/signin?username={}&password={}&name={}&surname={}&address={}&home_phone={}&mobile_phone={}&identification_type=PASSPORT` | String username  String password String name String surname  String address  String home_phone String mobile_phone  String identification_type - **PASSPORT** or **DRIVING_LICENSE**  String number| POST | "Success" or "Username is already taken" |  
