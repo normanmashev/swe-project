@@ -1,4 +1,5 @@
 export const RULES = {
+	capacity: [v => !!v || v > 0 || "Minimum capacity is 1 person"],
 	email: [
 		v => !!v || "E-mail is required",
 		v => /.+@.+\..+/.test(v) || "E-mail must be valid",
