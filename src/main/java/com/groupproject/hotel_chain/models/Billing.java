@@ -1,4 +1,4 @@
-package com.groupproject.hotel_chain.model;
+package com.groupproject.hotel_chain.models;
 
 import javax.persistence.*;
 
@@ -52,8 +52,7 @@ public class Billing {
         this.reservation = reservation;
     }
 
-    public Billing(int bill_id, int amount, String feature, Reservation reservation) {
-        this.bill_id = bill_id;
+    public Billing(int amount, String feature, Reservation reservation) {
         this.amount = amount;
         this.feature = feature;
         this.reservation = reservation;
