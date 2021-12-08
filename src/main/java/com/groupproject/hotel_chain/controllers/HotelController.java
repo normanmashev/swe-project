@@ -15,6 +15,12 @@ public class HotelController {
     @Autowired
     HotelRepository hotelRepository;
 
+    @GetMapping("/get/all")
+    public ResponseEntity<?> getHotels() {
+        List<Hotel> hotels = hotelRepository.findAll();
+        return ResponseEntity.ok(hotels);
+    }
+
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getHotel(@PathVariable(required = true) int id) {
         Hotel hotel = hotelRepository.findById(id).orElseThrow();
@@ -35,7 +41,17 @@ public class HotelController {
 
     @PostMapping("/delete/{id}")
     public ResponseEntity<?> deleteHotel(@PathVariable(required = true) int id) {
+        hotelRepository.findById(id).orElseThrow();
         hotelRepository.deleteById(id);
         return ResponseEntity.ok("");
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<?> addHotel(@RequestParam(required = true) String name,
+                                      @RequestParam(required = true) String address,
+                                      @RequestParam(required = true) List<String> phones) {
+        Hotel hotel = new Hotel(name, address, phones);
+        hotelRepository.save(hotel);
+        return ResponseEntity.ok(hotel.getHotel_id());
     }
 }
