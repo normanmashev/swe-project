@@ -87,6 +87,7 @@
 							dense
 							v-mask="'+7-###-###-##-##'"
 							placeholder="+7-___-___-__-__"
+							validate-on-blur
 							:rules="rules.phone"
 						>
 						</v-text-field>
@@ -100,6 +101,7 @@
 							placeholder="+7-___-___-__-__"
 							outlined
 							dense
+							validate-on-blur
 							:rules="rules.phone"
 						>
 						</v-text-field>
@@ -112,6 +114,7 @@
 					outlined
 					dense
 					label="Password"
+					:rules="rules.required"
 				></v-text-field>
 			</v-card-text>
 
