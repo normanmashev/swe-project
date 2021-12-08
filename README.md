@@ -1,4 +1,6 @@
 # documentation
+По дефлоту все параметры/аргументы required. Если написано required = false, то опционально
+
 
 ## Reservation Controller
 | Description | Link example | Params | Method | What returns |
