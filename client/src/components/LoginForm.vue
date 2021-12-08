@@ -1,5 +1,5 @@
 <template>
-	<v-form @submit.prevent="handleSubmit" lazy-validation>
+	<v-form @submit.prevent="handleSubmit" lazy-validation ref="form">
 		<v-card width="500px" max-width="500px">
 			<v-card-title class="d-flex flex-column align-start">
 				<h5 class="text-h5">Authorization</h5>

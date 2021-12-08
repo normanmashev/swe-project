@@ -2,7 +2,7 @@
 	<v-form @submit.prevent="handleSubmit" lazy-validation>
 		<v-card width="500px" max-width="500px">
 			<v-card-title class="d-flex flex-column align-start">
-				<h5 class="text-h5">Registration</h5>
+				<h6 class="text-h6">Registration for guest</h6>
 				<v-divider width="100px" class="my-3"></v-divider>
 				<p class="grey--text subtitle-1 ma-0">
 					<router-link class="text-decoration-none" to="/login">
