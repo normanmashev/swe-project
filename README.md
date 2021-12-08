@@ -45,3 +45,9 @@
 | Description | Link example | Params | Method | What returns |
 |-------------|--------------|----------|:------:|------------|
 | Get **Room** which is not occupied between some specific dates | `/api/filter/?checkin_date={yyyy-MM-dd}&checkout_date={yyyy-MM-dd}&room_type_id=7`  Example: `/api/filter/?checkin_date=2021-12-13&checkout_date=2021-12-18&room_type_id=7` | String checkin_date - format should be `yyyy-MM-dd`,  String checkout_date - format should be `yyyy-MM-dd`, int room_type_id - id of needed room type that wants to live in | `POST` | Throws parseException if date format is not correct. Returns empty if there is no room that is not occupied in that dates. Returns object **Room** |
+
+## Working Hours Controller
+| Description | Link example | Params | Method | What returns |
+|-------------|--------------|----------|:------:|------------|
+| Get a list of all **WorkingHours** of all employees | `/api/workinghours/schedules` | | `GET` | List of all **WorkingHours** |
+| Get a list of all **WorkingHours** for specific employee | `/api/workinghours/schedule?employee_id={}` Example: `/api/workinghours/schedule?employee_id=3` | int employee_id | `GET` | List of **WorkingHours** for user with id = employee_id or throws if no such employee with emlpoyee_id | 
