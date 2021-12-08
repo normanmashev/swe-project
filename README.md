@@ -15,6 +15,7 @@
 |-------------|--------------|----------|:------:|------------|
 | Get a list of all hotels | `/api/hotel/get/all` | | GET | list of all hotels |
 | Get specific hotel | `/api/hotel/get/{id}`  Example: `/api/hotel/get/2`(отель с айдишкой 2) | int id required| GET | one Hotel object |
+| Edit a specific hotel | `/api/hotel/edit/{id}?name={}&address={}&phones={}&phones={}&phones{}`  Example: `/api/hotel/edit/2?name=Rixos&address=Moscow&phones=123&phones=345`| int id,  String name,  String address,  List\[String\] phones | POST | Empty or throws exception |
 
 ## Login Controller
 | Description | Link example | Params | Method | What returns |
