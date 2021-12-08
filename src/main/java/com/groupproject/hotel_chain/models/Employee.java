@@ -21,6 +21,18 @@ public class Employee {
 
     private String role;
 
+    @ManyToOne
+    @JoinColumn(name = "hotel_id")
+    private Hotel hotel;
+
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
+    }
+
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private Set<WorkingHours> workingHours = new HashSet<>();
 

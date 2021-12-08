@@ -22,6 +22,9 @@ public class Hotel {
     private List<String> phone;
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
+    private Set<Employee> employees = new HashSet<>();
+
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
     private Set<Room_Type> room_types = new HashSet<>();
 
 
@@ -61,6 +64,14 @@ public class Hotel {
     }
 
     public Set<Room_Type> getRoomTypes() { return room_types; }
+
+    public Set<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(Set<Employee> employees) {
+        this.employees = employees;
+    }
 
     public Hotel(String name, String address, List<String> phone) {
         this.name = name;

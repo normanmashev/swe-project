@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -35,16 +37,18 @@ public class FilterController {
     RoomRepository roomRepository;
 
     @PostMapping("/")
-    public ResponseEntity<?> filter(@RequestParam Date checkin_date,
-                                   @RequestParam Date checkout_date,
-                                   @RequestParam int room_type_id) {
+    public ResponseEntity<?> filter(@RequestParam String checkin_date,
+                                   @RequestParam String checkout_date,
+                                   @RequestParam int room_type_id) throws ParseException {
+        Date check_in_date = new SimpleDateFormat("yyyy-MM-dd").parse(checkin_date);
+        Date check_out_date = new SimpleDateFormat("yyyy-MM-dd").parse(checkout_date);
         List<Room> rooms = roomRepository.findAll();
         for (Room room : rooms) {
             if (room.getRoom_type().getRoom_type_id() != room_type_id)
                 continue;
             boolean reserved = false;
             for (Reservation reservation : room.getReservations()) {
-                if (max(reservation.getCheckin_date(), checkin_date).before(min(reservation.getCheckout_date(), checkout_date))) {
+                if (max(reservation.getCheckin_date(), check_in_date).before(min(reservation.getCheckout_date(), check_out_date))) {
                     reserved = true;
                     break;
                 }

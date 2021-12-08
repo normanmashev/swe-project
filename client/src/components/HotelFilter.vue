@@ -1,10 +1,15 @@
 <template>
 	<v-row class="mt-5">
-		<v-col cols="12" class="pb-0 d-flex align-items-center">
-			<h6 class="text-h6 grey--text mr-4">Filters</h6>
-			<v-btn color="primary" depressed x-small text>
+		<v-col cols="12" class="pb-0 d-flex">
+			<h6 class="text-h6 grey--text font-weight-light mr-4">Filters</h6>
+			<v-btn
+				color="primary"
+				class="subtitle-2 font-weight-light text-capitalize"
+				depressed
+				text
+			>
 				<v-icon small>mdi-filter</v-icon>
-				Apply filters
+				Apply
 			</v-btn>
 		</v-col>
 		<v-col cols="12" sm="4" md="3">
@@ -46,7 +51,7 @@ export default {
 				dateFrom: "",
 				dateTo: "",
 				location: "",
-				guestNumber: 1,
+				guestNumber: null,
 			},
 		};
 	},

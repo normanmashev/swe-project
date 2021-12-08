@@ -2,9 +2,11 @@ package com.groupproject.hotel_chain.controllers;
 
 import com.groupproject.hotel_chain.models.Employee;
 import com.groupproject.hotel_chain.models.Guest;
+import com.groupproject.hotel_chain.models.Hotel;
 import com.groupproject.hotel_chain.models.Uid_type;
 import com.groupproject.hotel_chain.repository.EmployeeRepository;
 import com.groupproject.hotel_chain.repository.GuestRepository;
+import com.groupproject.hotel_chain.repository.HotelRepository;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -25,6 +28,9 @@ public class LoginController {
 
     @Autowired
     EmployeeRepository employeeRepository;
+
+    @Autowired
+    HotelRepository hotelRepository;
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -49,43 +55,70 @@ public class LoginController {
         return ResponseEntity.badRequest().body("Incorrect Username");
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestParam(required = true) String username,
-                               @RequestParam(required = true) String password,
-                               @RequestParam(required = false) String name,
-                               @RequestParam(required = false) String surname,
-                               @RequestParam(required = true) String role,
-                               @RequestParam(required = false) String address,
-                               @RequestParam(required = false) String home_phone,
-                               @RequestParam(required = false) String mobile_phone,
-                               @RequestParam(required = false) Uid_type identification_type,
-                               @RequestParam(required = false) String number) {
+    @PostMapping("/signup/guest")
+    public ResponseEntity<?> registerUser(@RequestParam String username,
+                                          @RequestParam String password,
+                                           @RequestParam String name,
+                                           @RequestParam String surname,
+                                           @RequestParam String address,
+                                           @RequestParam String home_phone,
+                                           @RequestParam String mobile_phone,
+                                           @RequestParam Uid_type identification_type,
+                                           @RequestParam String number) {
         if (guestRepository.findByUsername(username).isPresent()) {
             return ResponseEntity.badRequest().body("Username is already taken");
         }
+        Guest guest = new Guest(username,
+                passwordEncoder.encode(password),
+                identification_type,
+                number,
+                name,
+                surname,
+                address,
+                home_phone,
+                mobile_phone);
+        guestRepository.save(guest);
+        return ResponseEntity.ok("Success");
+    }
+
+    @PostMapping("/signup/manager")
+    public ResponseEntity<?> registerManager(@RequestParam String username,
+                                             @RequestParam String password,
+                                             @RequestParam String name,
+                                             @RequestParam String surname,
+                                             @RequestParam String hotelName,
+                                             @RequestParam String address,
+                                             @RequestParam List<String> phones) {
         if (employeeRepository.findByUsername(username).isPresent()) {
             return ResponseEntity.badRequest().body("Username is already taken");
         }
-        if (role == "guest") {
-            Guest guest = new Guest(username,
-                    passwordEncoder.encode(password),
-                    identification_type,
-                    number,
-                    name,
-                    surname,
-                    address,
-                    home_phone,
-                    mobile_phone);
-            guestRepository.save(guest);
-        } else {
-            Employee employee = new Employee(username,
-                    passwordEncoder.encode(password),
-                    name,
-                    surname,
-                    role
-                    );
-            employeeRepository.save(employee);
-        }
+        Employee employee = new Employee(username,
+                passwordEncoder.encode(password),
+                name,
+                surname,
+                "manager");
+        employeeRepository.save(employee);
+        Hotel hotel = new Hotel(hotelName, address, phones);
+        hotelRepository.save(hotel);
+        employee.setHotel(hotel);
         return ResponseEntity.ok("Success");
+    }
+
+    @PostMapping("/signup/employee")
+    public ResponseEntity<?> registerEmployee(@RequestParam String username,
+                                              @RequestParam String password,
+                                              @RequestParam String name,
+                                              @RequestParam String surname,
+                                              @RequestParam String role,
+                                              @RequestParam int hotel_id) {
+        Employee employee = new Employee(username,
+                passwordEncoder.encode(password),
+                name,
+                surname,
+                role);
+        Hotel hotel = hotelRepository.findById(hotel_id).orElseThrow();
+        employee.setHotel(hotel);
+        employeeRepository.save(employee);
+        return ResponseEntity.ok("");
     }
 }

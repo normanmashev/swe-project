@@ -6,6 +6,10 @@ import vuetify from "./plugins/vuetify";
 
 import "./assets/scss/styles.scss";
 
+import { VueMaskDirective } from "v-mask";
+
+Vue.directive("mask", VueMaskDirective);
+
 Vue.config.productionTip = false;
 
 const requireComponent = require.context(
