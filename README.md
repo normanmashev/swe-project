@@ -35,3 +35,9 @@
 | Get all room types for specific hotel | `/api/roomtype/get/all/{id}`  Example: `/api/roomtype/get/all/4` | int id - hotel_id | `GET` | List of all Room_Type in hotel or throws if no such hotel with hotel id |
 | Edit room type in specific hotel | `/api/roomtype/edit/{id}?size={}&capacity={}&hotel_id={}`  Example: `/api/roomtype/edit/4?size=10&capacity=11&hotel_id=12` | int id - room type id,  int size - new room type size,  int capacity - new room type capacity,  int hotel_id - new hotel id | `POST` | Empty or throws if no such roomType with id or throws if no such hotel with hotel id exists |
 | Delete room type | `/api/roomtype/delete/{id}`  Example: `/api/roomtype/delete/7` | int id - room type id | `POST` | empty if success or throws if no such room type with id |
+
+
+## Filter Controller
+| Description | Link example | Params | Method | What returns |
+|-------------|--------------|----------|:------:|------------|
+| Get **Room** which is not occupied between some specific dates | `/api/filter/?checkin_date={yyyy-MM-dd}&checkout_date={yyyy-MM-dd}&room_type_id=7`  Example: `/api/filter/?checkin_date=2021-12-13&checkout_date=2021-12-18&room_type_id=7` | String checkin_date - format should be `yyyy-MM-dd`,  String checkout_date - format should be `yyyy-MM-dd`, int room_type_id - id of needed room type that wants to live in | `POST` | Throws parseException if date format is not correct. Returns empty if there is no room that is not occupied in that dates. Returns object **Room** |
