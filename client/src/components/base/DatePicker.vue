@@ -17,7 +17,11 @@
 				v-on="on"
 			></v-text-field>
 		</template>
-		<v-date-picker :value="date" @input="handleInput"></v-date-picker>
+		<v-date-picker
+			:value="date"
+			@input="handleInput"
+			:min="minDate"
+		></v-date-picker>
 	</v-menu>
 </template>
 
@@ -34,12 +38,23 @@ export default {
 			type: String,
 			default: "",
 		},
+		pastDates: {
+			type: Boolean,
+			default: true,
+		},
 	},
 
 	data() {
 		return {
 			show: false,
 		};
+	},
+
+	computed: {
+		minDate() {
+			if (this.pastDates) return "1970-01-01";
+			return new Date().toISOString().substr(0, 10);
+		},
 	},
 
 	methods: {
