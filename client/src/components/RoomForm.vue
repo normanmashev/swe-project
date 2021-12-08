@@ -42,13 +42,11 @@ import { mapGetters } from "vuex";
 export default {
 	name: "RoomForm",
 
-  data() {
-    return {
-      data: {
-
-      }
-    }
-  }
+	data() {
+		return {
+			data: {},
+		};
+	},
 
 	computed: {
 		...mapGetters({
@@ -56,7 +54,7 @@ export default {
 		}),
 	},
 
-  	methods: {
+	methods: {
 		handleSubmit() {},
 	},
 
