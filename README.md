@@ -12,6 +12,7 @@
 | Description | Link example | Params | Method | What returns |
 |-------------|--------------|----------|:------:|------------|
 | Get a list of all hotels | `/api/hotel/get/all` | | GET | list of all hotels |
+| Get specific hotel | `/api/hotel/get/{id}`  Example: `/api/hotel/get/2`(отель с айдишкой 2) | int id required| GET | one Hotel object |
 
 ## Login Controller
 | Description | Link example | Params | Method | What returns |
