@@ -4,19 +4,42 @@
 			<h6 class="text-h6 grey--text font-weight-light mr-4">Filters</h6>
 			<v-btn
 				color="primary"
-				class="subtitle-2 font-weight-light text-capitalize"
+				class="subtitle-2 font-weight-light text-capitalize mr-2"
 				depressed
 				text
+				@click="applyFilters"
 			>
 				<v-icon small>mdi-filter</v-icon>
 				Apply
 			</v-btn>
+			<v-btn
+				color="grey darken-4"
+				class="subtitle-2 font-weight-light text-capitalize"
+				depressed
+				text
+				@click="resetFilters"
+			>
+				<v-icon small>mdi-restore</v-icon>
+				Reset
+			</v-btn>
 		</v-col>
 		<v-col cols="12" sm="4" md="3">
-			<DatePicker :date.sync="data.dateFrom" label="Check-in date" solo dense />
+			<DatePicker
+				:date.sync="data.dateFrom"
+				label="Check-in date"
+				:past-dates="false"
+				solo
+				dense
+			/>
 		</v-col>
 		<v-col cols="12" sm="4" md="3">
-			<DatePicker :date.sync="data.dateTo" label="Check-out date" solo dense />
+			<DatePicker
+				:date.sync="data.dateTo"
+				label="Check-out date"
+				:past-dates="false"
+				solo
+				dense
+			/>
 		</v-col>
 		<v-col cols="12" sm="4" md="3">
 			<v-text-field
@@ -30,18 +53,20 @@
 			></v-text-field>
 		</v-col>
 		<v-col cols="12" sm="4" md="3">
-			<v-text-field
+			<v-autocomplete
 				v-model="data.location"
 				prepend-inner-icon="mdi-map-marker"
 				label="Location"
 				solo
 				dense
-			></v-text-field>
+				:items="cities"
+			></v-autocomplete>
 		</v-col>
 	</v-row>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
 	name: "HomeFilter",
 
@@ -54,6 +79,26 @@ export default {
 				guestNumber: null,
 			},
 		};
+	},
+
+	computed: {
+		...mapState(["cities"]),
+	},
+
+	methods: {
+		applyFilters() {
+			this.$store.commit("SET_FILTERS", this.data);
+		},
+
+		resetFilters() {
+			this.$store.commit("SET_FILTERS", null);
+			this.data = {
+				dateFrom: "",
+				dateTo: "",
+				location: "",
+				guestNumber: null,
+			};
+		},
 	},
 };
 </script>

@@ -42,15 +42,16 @@
 					:rules="rules.required"
 				></v-text-field>
 
-				<v-text-field
+				<v-autocomplete
 					v-model="data.address"
 					prepend-inner-icon="mdi-map-marker"
 					label="Address"
 					outlined
 					dense
+					:items="cities"
 					:rules="rules.required"
 				>
-				</v-text-field>
+				</v-autocomplete>
 				<v-row class="pb-4">
 					<v-col cols="12" class="d-flex flex-column">
 						<v-text-field
@@ -112,6 +113,7 @@
 
 <script>
 import { RULES, ID_TYPES } from "@/utils/helpers";
+import { mapState } from "vuex";
 
 export default {
 	name: "RegisterManager",
@@ -134,6 +136,10 @@ export default {
 				v => v.length === 0 || v.length === 16 || "Enter valid phone number",
 			],
 		};
+	},
+
+	computed: {
+		...mapState(["cities"]),
 	},
 
 	methods: {

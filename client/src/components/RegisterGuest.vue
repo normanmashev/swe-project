@@ -68,15 +68,16 @@
 					</v-col>
 				</v-row>
 
-				<v-text-field
+				<v-autocomplete
 					v-model="data.address"
 					prepend-inner-icon="mdi-map-marker"
 					label="Address"
 					outlined
 					dense
+					:items="cities"
 					:rules="rules.required"
 				>
-				</v-text-field>
+				</v-autocomplete>
 				<v-row>
 					<v-col cols="12" sm="6">
 						<v-text-field
@@ -134,6 +135,7 @@
 
 <script>
 import { RULES, ID_TYPES } from "@/utils/helpers";
+import { mapState } from "vuex";
 
 export default {
 	name: "RegisterGuest",
@@ -165,6 +167,7 @@ export default {
 					: "Driver license";
 			return label + " ID";
 		},
+		...mapState(["cities"]),
 	},
 
 	methods: {
