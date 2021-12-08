@@ -1,5 +1,6 @@
 const state = {
 	hotels: [],
+	filters: null,
 	roomTypes: [],
 };
 
@@ -11,6 +12,7 @@ const getters = {
 const mutations = {
 	SET_HOTELS: (state, data) => (state.hotels = data),
 	SET_ROOM_TYPES: (state, data) => (state.roomTypes = data),
+	SET_FILTERS: (state, data) => (state.filters = data),
 };
 
 const actions = {
