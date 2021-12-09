@@ -114,7 +114,7 @@ public class ReservationController {
 
         if (check_out_date != null) {
             Date checkout_date = new SimpleDateFormat("yyyy-MM-dd").parse(check_out_date);
-            if (curDate.after(checkout_date)) {
+            if (curDate.after(checkout_date) || curDate == checkout_date) {
                 throw new Exception("Cannot edit check out date");
             }
             oldReservation.setCheckin_date(checkout_date);
