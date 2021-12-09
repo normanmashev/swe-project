@@ -22,7 +22,7 @@ public class RoomController {
     @Autowired
     private RoomRepository roomRepository;
 
-    @GetMapping("/get/all/{id}")
+    @GetMapping("/get/all/{room_type_id}")
     public ResponseEntity<?> getRoomsForRoomTypeId(@PathVariable int room_type_id) {
         Room_Type room_type = roomTypeRepository.findById(room_type_id).orElseThrow();
         return ResponseEntity.ok(room_type.getRooms());
