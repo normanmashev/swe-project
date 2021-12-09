@@ -33,4 +33,13 @@ public class EmployeeController {
         }
         return ResponseEntity.ok(employees);
     }
+
+    @PostMapping("edit/salary")
+    public ResponseEntity<?> editSalary(@RequestParam int employee_id,
+                                        @RequestParam int salary) {
+        Employee employee = employeeRepository.findById(employee_id).orElseThrow();
+        employee.setSalary(salary);
+        employeeRepository.save(employee);
+        return ResponseEntity.ok("");
+    }
 }
