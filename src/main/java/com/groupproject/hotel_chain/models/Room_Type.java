@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -30,6 +32,9 @@ public class Room_Type {
 
     @Column
     private int capacity;
+
+    @ElementCollection
+    private List<Integer> prices;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne(fetch = FetchType.LAZY)
@@ -77,10 +82,15 @@ public class Room_Type {
 
     public Set<Room> getRooms() { return roomSet; }
 
-    public Room_Type(String name, int size, int capacity, Hotel hotel) {
+    public List<Integer> getPrices() { return prices; }
+
+    public void setPrices(List<Integer> prices) { this.prices = prices; }
+
+    public Room_Type(String name, int size, int capacity, Hotel hotel, List<Integer> prices) {
         this.name = name;
         this.size = size;
         this.capacity = capacity;
         this.hotel = hotel;
+        this.prices = prices;
     }
 }

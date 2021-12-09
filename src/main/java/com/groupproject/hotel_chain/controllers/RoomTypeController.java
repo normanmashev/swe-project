@@ -30,6 +30,8 @@ public class RoomTypeController {
     @Autowired
     private RoomRepository roomRepository;
 
+    private List<Integer> defaultPrices = new ArrayList<>(List.of(100, 100, 100, 100, 100, 100, 100));
+
     @GetMapping("/get/all/{id}")
     public ResponseEntity<?> getRoomTypesForHotelId(@PathVariable int id) {
         Hotel hotel = hotelRepository.findById(id).orElseThrow();
@@ -40,9 +42,13 @@ public class RoomTypeController {
     public ResponseEntity<?> addRoomType(@RequestParam String name,
                                          @RequestParam int size,
                                          @RequestParam int capacity,
-                                         @RequestParam int hotel_id) {
+                                         @RequestParam int hotel_id,
+                                         @RequestParam(required = false) List<Integer> prices) {
         Hotel hotel = hotelRepository.findById(hotel_id).orElseThrow();
-        Room_Type room_type = new Room_Type(name, size, capacity, hotel);
+        if (prices.size() != 7) {
+            prices = defaultPrices;
+        }
+        Room_Type room_type = new Room_Type(name, size, capacity, hotel, prices);
         roomTypeRepository.save(room_type);
         return ResponseEntity.ok(room_type.getRoom_type_id());
     }
@@ -50,10 +56,12 @@ public class RoomTypeController {
     @PostMapping("/edit/{id}")
     public ResponseEntity<?> editRoomType(@PathVariable int id,
                                           @RequestParam int size,
-                                          @RequestParam int capacity) {
+                                          @RequestParam int capacity,
+                                          @RequestParam List<Integer> prices) {
         Room_Type room_type = roomTypeRepository.findById(id).orElseThrow();
         room_type.setCapacity(capacity);
         room_type.setSize(size);
+        room_type.setPrices(prices);
         roomTypeRepository.save(room_type);
         return ResponseEntity.ok("");
     }
