@@ -73,6 +73,27 @@ public class RoomTypeController {
         return ResponseEntity.ok("");
     }
 
+    /**
+     * find Min Dates
+     * @param date1
+     * @param date2
+     * @return
+     */
+    public static Date minDate(Date date1, Date date2) {
+        // if date1 before date2 then return date1 else return date2
+        return date1.before(date2) ? date1 : date2;
+    }
+    /**
+     * find Max Dates
+     * @param date1
+     * @param date2
+     * @return
+     */
+    public static Date maxDate(Date date1, Date date2) {
+        // if date1 after date2 then return date1 else return date2
+        return date1.after(date2) ? date1 : date2;
+    }
+
     @GetMapping("/find")
     public ResponseEntity<?> find(@RequestParam String check_in_date,
                                   @RequestParam String check_out_date,
@@ -81,42 +102,29 @@ public class RoomTypeController {
         Date checkin_date = new SimpleDateFormat("yyyy-MM-dd").parse(check_in_date);
         Date checkout_date = new SimpleDateFormat("yyyy-MM-dd").parse(check_out_date);
 
-        Set<Room_Type> room_Types = new HashSet<Room_Type>();
-        List<Room> rooms = roomRepository.findAll();
+        List<Hotel> hotels = hotelRepository.findAll();
+        List<Hotel> ans = new ArrayList<>();
 
-        for (Room room : rooms) {
-            if (room_Types.contains(room.getRoom_type()) || room.getRoom_type().getCapacity() != capacity) {
-                continue;
-            }
-            boolean reserved = false;
-            for (Reservation reservation : room.getReservations()) {
-                if ((checkin_date.after(reservation.getCheckin_date()) && checkin_date.before(reservation.getCheckout_date()))
-                        || (checkout_date.after(reservation.getCheckin_date()) && checkout_date.before(reservation.getCheckout_date()))) {
-                    reserved = true;
-                    break;
+        for (Hotel hotel : hotels) {
+                        boolean reserved = false;
+            for (Room_Type room_type : hotel.getRoomTypes()) {
+                if (room_type.getCapacity() == capacity) {
+                    for (Room room : room_type.getRooms()) {
+                        for (Reservation reservation : room.getReservations()) {
+                            if (maxDate(reservation.getCheckin_date(), checkin_date).before(
+                                    minDate(reservation.getCheckout_date(), checkout_date))) {
+                                reserved = true;
+                            }
+                        }
+                        if (!reserved && !ans.contains(hotel)) {
+                            ans.add(hotel);
+                            break;
+                        }
+                    }
                 }
-            }
-            if (!reserved) {
-                room_Types.add(room.getRoom_type());
             }
         }
 
-
-        List<HotelRoomTypeDto> hotelRoomTypeDtos = new ArrayList<>();
-        for (Room_Type room_type : room_Types) {
-            HotelRoomTypeDto oldHotelRoomTypeDto = null;
-            for (HotelRoomTypeDto hotelRoomTypeDto : hotelRoomTypeDtos) {
-                if (hotelRoomTypeDto.getHotel() == room_type.getHotel()) {
-                    oldHotelRoomTypeDto = hotelRoomTypeDto;
-                    break;
-                }
-            }
-            if (oldHotelRoomTypeDto == null) {
-                oldHotelRoomTypeDto = new HotelRoomTypeDto(room_type.getHotel());
-                hotelRoomTypeDtos.add(oldHotelRoomTypeDto);
-            }
-            oldHotelRoomTypeDto.addRoom_Type(room_type);
-        }
-        return ResponseEntity.ok(hotelRoomTypeDtos);
+        return ResponseEntity.ok(ans);
     }
 }

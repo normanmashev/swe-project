@@ -4,6 +4,7 @@ import com.groupproject.hotel_chain.models.Hotel;
 import com.groupproject.hotel_chain.models.Room;
 import com.groupproject.hotel_chain.models.Room_Type;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,6 +21,6 @@ public class HotelRoomTypeDto {
 
     public HotelRoomTypeDto(Hotel hotel) {
         this.hotel = hotel;
-        this.room_types = Collections.emptyList();
+        this.room_types = new ArrayList<>();
     }
 }
