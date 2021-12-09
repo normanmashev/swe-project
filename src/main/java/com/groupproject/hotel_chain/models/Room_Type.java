@@ -1,5 +1,8 @@
 package com.groupproject.hotel_chain.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,10 +20,12 @@ public class Room_Type {
     @Column
     private int capacity;
 
-    @ManyToOne
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "room_type", cascade = CascadeType.ALL)
     private Set<Room> roomSet = new HashSet<>();
 

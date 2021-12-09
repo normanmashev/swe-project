@@ -29,37 +29,36 @@ public class RoomTypeController {
                                          @RequestParam int hotel_id) {
         Hotel hotel = hotelRepository.findById(hotel_id).orElseThrow();
         Room_Type room_type = new Room_Type(size, capacity, hotel);
-        hotel.getRoomTypes().add(room_type);
+//        hotel.getRoomTypes().add(room_type);
         roomTypeRepository.save(room_type);
-        hotelRepository.save(hotel);
+//        hotelRepository.save(hotel);
         return ResponseEntity.ok(room_type.getRoom_type_id());
     }
 
     @PostMapping("/edit/{id}")
     public ResponseEntity<?> editRoomType(@PathVariable int id,
                                           @RequestParam int size,
-                                          @RequestParam int capacity,
-                                          @RequestParam int hotel_id) {
+                                          @RequestParam int capacity) {
         Room_Type room_type = roomTypeRepository.findById(id).orElseThrow();
-        Hotel hotel1 = room_type.getHotel();
-        Hotel hotel2 = hotelRepository.findById(hotel_id).orElseThrow();
-        hotel1.getRoomTypes().remove(room_type);
+//        Hotel hotel1 = room_type.getHotel();
+//        Hotel hotel2 = hotelRepository.findById(hotel_id).orElseThrow();
+        //hotel1.getRoomTypes().remove(room_type);
         room_type.setCapacity(capacity);
         room_type.setSize(size);
-        room_type.setHotel(hotel2);
+//        room_type.setHotel(hotel2);
         roomTypeRepository.save(room_type);
-        hotelRepository.save(hotel1);
-        hotelRepository.save(hotel2);
+//        hotelRepository.save(hotel1);
+//        hotelRepository.save(hotel2);
         return ResponseEntity.ok("");
     }
 
     @PostMapping("/delete/{id}")
     public ResponseEntity<?> deleteRoomType(@PathVariable int id) {
         Room_Type room_type = roomTypeRepository.findById(id).orElseThrow();
-        Hotel hotel = room_type.getHotel();
-        hotel.getRoomTypes().remove(room_type);
+//        Hotel hotel = room_type.getHotel();
+//        hotel.getRoomTypes().remove(room_type);
         roomTypeRepository.delete(room_type);
-        hotelRepository.save(hotel);
+//        hotelRepository.save(hotel);
         return ResponseEntity.ok("");
     }
 }

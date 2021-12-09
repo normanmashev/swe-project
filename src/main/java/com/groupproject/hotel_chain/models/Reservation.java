@@ -1,5 +1,9 @@
 package com.groupproject.hotel_chain.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -20,6 +24,7 @@ public class Reservation {
 
     @ManyToOne
     @JoinColumn(name = "room")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Room room;
 
     public Room getRoom() {
@@ -32,8 +37,11 @@ public class Reservation {
 
     @ManyToOne
     @JoinColumn(name = "guest_id")
+    @JsonProperty(access = JsonProperty.Access.READ_WRITE)
+    @JsonBackReference
     private Guest guest;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
     private Set<Billing> billings = new HashSet<>();
 

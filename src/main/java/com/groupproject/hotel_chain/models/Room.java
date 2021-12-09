@@ -1,5 +1,8 @@
 package com.groupproject.hotel_chain.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,6 +23,7 @@ public class Room {
     @Column(name = "occupied", nullable = false)
     private boolean occupied;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToMany
     @JoinColumn(name = "reservation")
     Set<Reservation> reservations = new HashSet<>();
@@ -40,6 +44,7 @@ public class Room {
         this.reservations = reservations;
     }
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "room_type_id")
     private Room_Type room_type;

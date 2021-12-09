@@ -1,5 +1,7 @@
 package com.groupproject.hotel_chain.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -13,6 +15,7 @@ public class Billing {
 
     private String feature;
 
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "reservation_id")
     private Reservation reservation;

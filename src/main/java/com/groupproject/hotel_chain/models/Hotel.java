@@ -1,5 +1,7 @@
 package com.groupproject.hotel_chain.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +26,7 @@ public class Hotel {
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
     private Set<Employee> employees = new HashSet<>();
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
     private Set<Room_Type> room_types = new HashSet<>();
 

@@ -1,5 +1,7 @@
 package com.groupproject.hotel_chain.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.sql.Time;
 import java.util.Date;
@@ -15,6 +17,7 @@ public class WorkingHours {
     private Time end_time;
     private Date date;
 
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "employee")
     private Employee employee;
