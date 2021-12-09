@@ -1,12 +1,16 @@
 package com.groupproject.hotel_chain.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "guest")
 public class Guest {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int guest_id;
 
     @Enumerated(EnumType.STRING)
@@ -22,6 +26,11 @@ public class Guest {
     private String password;
 
     private String name, surname;
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToMany
+    @JoinColumn(name = "reservation")
+    Set<Reservation> reservationSet = new HashSet<>();
 
     public String getUsername() {
         return username;

@@ -1,27 +1,26 @@
 package com.groupproject.hotel_chain.controllers;
 
-import com.groupproject.hotel_chain.models.Employee;
-import com.groupproject.hotel_chain.models.Guest;
-import com.groupproject.hotel_chain.models.Hotel;
-import com.groupproject.hotel_chain.models.Uid_type;
+import com.groupproject.hotel_chain.models.*;
 import com.groupproject.hotel_chain.repository.EmployeeRepository;
 import com.groupproject.hotel_chain.repository.GuestRepository;
 import com.groupproject.hotel_chain.repository.HotelRepository;
+import com.groupproject.hotel_chain.repository.WorkingHoursRepository;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.sql.Time;
+import java.time.DayOfWeek;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin
 @RestController
-@RequestMapping
+@RequestMapping("/api")
 public class LoginController {
     @Autowired
     GuestRepository guestRepository;
@@ -32,6 +31,9 @@ public class LoginController {
     @Autowired
     HotelRepository hotelRepository;
 
+    @Autowired
+    WorkingHoursRepository workingHoursRepository;
+
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @PostMapping("/signin")
@@ -40,19 +42,17 @@ public class LoginController {
         Optional<Guest> guest = guestRepository.findByUsername(username);
         if (guest.isPresent()) {
             if (passwordEncoder.matches(password, guest.get().getPassword())) {
-                return ResponseEntity.ok("guest");
+                return ResponseEntity.ok(guest);
             }
             return ResponseEntity.badRequest().body("Incorrect Password");
         }
 
-        Optional<Employee> employee = employeeRepository.findByUsername(username);
-        if (employee.isPresent()) {
-            if (passwordEncoder.matches(password, employee.get().getPassword())) {
-                return ResponseEntity.ok(employee.get().getRole());
-            }
+        Employee employee = employeeRepository.findByUsername(username).orElseThrow();
+        if (passwordEncoder.matches(password, employee.getPassword())) {
+            return ResponseEntity.ok(employee);
+        } else {
             return ResponseEntity.badRequest().body("Incorrect Password");
         }
-        return ResponseEntity.badRequest().body("Incorrect Username");
     }
 
     @PostMapping("/signup/guest")
@@ -97,10 +97,10 @@ public class LoginController {
                 name,
                 surname,
                 "manager");
-        employeeRepository.save(employee);
         Hotel hotel = new Hotel(hotelName, address, phones);
         hotelRepository.save(hotel);
         employee.setHotel(hotel);
+        employeeRepository.save(employee);
         return ResponseEntity.ok("Success");
     }
 
@@ -119,6 +119,17 @@ public class LoginController {
         Hotel hotel = hotelRepository.findById(hotel_id).orElseThrow();
         employee.setHotel(hotel);
         employeeRepository.save(employee);
+        EnumSet<DayOfWeek> dayOfWeeks = EnumSet.allOf(DayOfWeek.class);
+        for (DayOfWeek dayOfWeek : dayOfWeeks) {
+            if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
+                WorkingHours workingHours = new WorkingHours(null, null, dayOfWeek, employee);
+                workingHoursRepository.save(workingHours);
+            } else {
+                WorkingHours workingHours = new WorkingHours(new Time(9, 00, 00), new Time(18,  00, 00),
+                        dayOfWeek, employee);
+                workingHoursRepository.save(workingHours);
+            }
+        }
         return ResponseEntity.ok("");
     }
 }

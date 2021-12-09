@@ -1,5 +1,9 @@
 package com.groupproject.hotel_chain.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -8,7 +12,7 @@ import java.util.Set;
 @Table(name = "room")
 public class Room {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column
@@ -17,19 +21,26 @@ public class Room {
     @Column
     private int floor;
 
-    @Column(name = "occupied", nullable = false)
-    private boolean occupied;
+    @Column(name = "clean", nullable = false)
+    private boolean clean = true;
 
+    @JsonBackReference
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToMany
     @JoinColumn(name = "reservation")
     Set<Reservation> reservations = new HashSet<>();
 
-    public boolean isOccupied() {
-        return occupied;
+    @JsonManagedReference
+    @ManyToOne
+    @JoinColumn(name = "room_type_id")
+    private Room_Type room_type;
+
+    public boolean getIsClean() {
+        return clean;
     }
 
-    public void setOccupied(boolean occupied) {
-        this.occupied = occupied;
+    public void setClean(boolean clean) {
+        this.clean = clean;
     }
 
     public Set<Reservation> getReservations() {
@@ -39,10 +50,6 @@ public class Room {
     public void setReservations(Set<Reservation> reservations) {
         this.reservations = reservations;
     }
-
-    @ManyToOne
-    @JoinColumn(name = "room_type_id")
-    private Room_Type room_type;
 
     public int getId() {
         return id;
@@ -79,25 +86,9 @@ public class Room {
     public Room() {
     }
 
-    public Boolean getOccupied() {
-        return occupied;
-    }
-
-    public void setOccupied(Boolean occupied) {
-        this.occupied = occupied;
-    }
-
     public Room(int number, int floor, Room_Type room_type) {
         this.number = number;
         this.floor = floor;
         this.room_type = room_type;
-        this.occupied = false;
-    }
-
-    public Room(int number, int floor, Room_Type room_type, boolean occupied) {
-        this.number = number;
-        this.floor = floor;
-        this.room_type = room_type;
-        this.occupied = occupied;
     }
 }

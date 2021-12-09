@@ -1,18 +1,21 @@
 package com.groupproject.hotel_chain.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "billing")
 public class Billing {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int bill_id;
 
-    private int amount;
+    private long price;
 
     private String feature;
 
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "reservation_id")
     private Reservation reservation;
@@ -28,12 +31,12 @@ public class Billing {
         this.bill_id = bill_id;
     }
 
-    public int getAmount() {
-        return amount;
+    public long getPrice() {
+        return price;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public String getFeature() {
@@ -52,8 +55,8 @@ public class Billing {
         this.reservation = reservation;
     }
 
-    public Billing(int amount, String feature, Reservation reservation) {
-        this.amount = amount;
+    public Billing(long price, String feature, Reservation reservation) {
+        this.price = price;
         this.feature = feature;
         this.reservation = reservation;
     }

@@ -1,15 +1,32 @@
 package com.groupproject.hotel_chain.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "room_type")
 public class Room_Type {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int room_type_id;
+
+    @Column
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @Column
     private int size;
@@ -17,12 +34,17 @@ public class Room_Type {
     @Column
     private int capacity;
 
-    @ManyToOne
+    @ElementCollection
+    private List<Integer> prices;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "room_type", cascade = CascadeType.ALL)
-    private Set<Room> roomSet = new HashSet<>();
+    private Set<Room> rooms = new HashSet<>();
 
     public Room_Type() {
     }
@@ -59,11 +81,17 @@ public class Room_Type {
         this.hotel = hotel;
     }
 
-    public Set<Room> getRooms() { return roomSet; }
+    public Set<Room> getRooms() { return rooms; }
 
-    public Room_Type(int size, int capacity, Hotel hotel) {
+    public List<Integer> getPrices() { return prices; }
+
+    public void setPrices(List<Integer> prices) { this.prices = prices; }
+
+    public Room_Type(String name, int size, int capacity, Hotel hotel, List<Integer> prices) {
+        this.name = name;
         this.size = size;
         this.capacity = capacity;
         this.hotel = hotel;
+        this.prices = prices;
     }
 }

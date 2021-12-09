@@ -1,5 +1,10 @@
 package com.groupproject.hotel_chain.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -8,7 +13,7 @@ import java.util.Set;
 @Table(name = "employee")
 public class Employee {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int employee_id;
 
     @Column
@@ -21,8 +26,20 @@ public class Employee {
 
     private String role;
 
+    private int salary;
+
+    public int getSalary() {
+        return salary;
+    }
+
+    public void setSalary(int salary) {
+        this.salary = salary;
+    }
+
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "hotel_id")
+    @JsonProperty(access = JsonProperty.Access.READ_WRITE)
     private Hotel hotel;
 
     public Hotel getHotel() {
@@ -33,6 +50,7 @@ public class Employee {
         this.hotel = hotel;
     }
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private Set<WorkingHours> workingHours = new HashSet<>();
 
@@ -101,5 +119,6 @@ public class Employee {
         this.name = name;
         this.surname = surname;
         this.role = role;
+        this.salary = 0;
     }
 }
