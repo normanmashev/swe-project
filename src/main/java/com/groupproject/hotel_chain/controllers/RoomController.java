@@ -1,5 +1,6 @@
 package com.groupproject.hotel_chain.controllers;
 
+import com.groupproject.hotel_chain.models.Hotel;
 import com.groupproject.hotel_chain.models.Room;
 import com.groupproject.hotel_chain.models.Room_Type;
 import com.groupproject.hotel_chain.repository.HotelRepository;
@@ -9,6 +10,10 @@ import com.groupproject.hotel_chain.repository.RoomTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/room")
@@ -21,6 +26,18 @@ public class RoomController {
     private ReservationRepository reservationRepository;
     @Autowired
     private RoomRepository roomRepository;
+
+    @GetMapping("get/byhotel/{hotel_id}")
+    public ResponseEntity<?> getRoomsForHoteId(@PathVariable int hotel_id) {
+        Hotel hotel = hotelRepository.findById(hotel_id).orElseThrow();
+        Set<Room_Type> roomTypes = hotel.getRoomTypes();
+        List<Room> rooms = new ArrayList<>();
+        for (Room_Type room_type : roomTypes) {
+            for (Room room : room_type.getRooms())
+                rooms.add(room);
+        }
+        return ResponseEntity.ok(rooms);
+    }
 
     @GetMapping("/get/all/{room_type_id}")
     public ResponseEntity<?> getRoomsForRoomTypeId(@PathVariable int room_type_id) {
