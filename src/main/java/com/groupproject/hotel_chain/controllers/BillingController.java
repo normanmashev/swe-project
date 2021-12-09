@@ -35,34 +35,6 @@ public class BillingController {
     @Autowired
     private ReservationRepository reservationRepository;
 
-    long getTotalPriceForReservation(Reservation reservation) {
-        Room_Type room_type = reservation.getRoom().getRoom_type();
-
-        LocalDateTime date1 = reservation.getCheckin_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        LocalDateTime date2 = reservation.getCheckout_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        long totalDays = Duration.between(date1, date2).toDays();
-
-        Date curDate = new Date();
-        Calendar c = Calendar.getInstance();
-        c.setTime(curDate);
-        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-
-        return room_type.getPrices().get(dayOfWeek - 1) * totalDays;
-    }
-
-    @Scheduled(cron = "0 0 0 * * ?")
-    void createNewBillings() {
-        Date curDate = new Date();
-        List<Reservation> reservations = reservationRepository.findAll()
-                .stream().filter(reservation -> reservation.getCheckout_date() == curDate)
-                .collect(Collectors.toList());
-
-        reservations.forEach(reservation -> {
-            Billing billing = new Billing(getTotalPriceForReservation(reservation), "Reservation price", reservation);
-            billingRepository.save(billing);
-        });
-    }
-
 
     @GetMapping("/get/all/hotel/{hotel_id}")
     public ResponseEntity<?> getAllForHotel(@PathVariable int hotel_id) {

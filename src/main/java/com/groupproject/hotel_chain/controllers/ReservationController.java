@@ -1,19 +1,19 @@
 package com.groupproject.hotel_chain.controllers;
 
-import com.groupproject.hotel_chain.models.Guest;
-import com.groupproject.hotel_chain.models.Hotel;
-import com.groupproject.hotel_chain.models.Reservation;
-import com.groupproject.hotel_chain.models.Room;
+import com.groupproject.hotel_chain.models.*;
 import com.groupproject.hotel_chain.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -30,6 +30,9 @@ public class ReservationController {
 
     @Autowired
     private RoomRepository roomRepository;
+
+    @Autowired
+    private BillingRepository billingRepository;
 
     @Autowired
     private RoomTypeRepository roomTypeRepository;
@@ -71,27 +74,63 @@ public class ReservationController {
         return null;
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<?> createReservation(
-            @RequestParam String username,
-            @RequestParam String check_in_date,
-            @RequestParam String check_out_date,
-            @RequestParam int room_type_id) throws Exception {
+    long getTotalPriceForReservation(Reservation reservation) {
+        Room_Type room_type = reservation.getRoom().getRoom_type();
+
+        LocalDateTime date1 = reservation.getCheckin_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        LocalDateTime date2 = reservation.getCheckout_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        long totalDays = Duration.between(date1, date2).toDays();
+
+        Date curDate = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(curDate);
+        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+
+        return room_type.getPrices().get(dayOfWeek - 1) * totalDays;
+    }
+
+    void createNewBillings(Reservation reservation) {
+        Billing billing = new Billing(getTotalPriceForReservation(reservation), "Reservation price", reservation);
+        billingRepository.save(billing);
+    }
+    @PostMapping("/add")
+    public ResponseEntity<?> addReservation(@RequestParam String username,
+                                            @RequestParam String check_in_date,
+                                            @RequestParam String check_out_date,
+                                            @RequestParam int room_id) throws ParseException {
+        Room room = roomRepository.findById(room_id).orElseThrow();
+        Guest guest = guestRepository.findByUsername(username).orElseThrow();
         Date checkin_date = new SimpleDateFormat("yyyy-MM-dd").parse(check_in_date);
         Date checkout_date = new SimpleDateFormat("yyyy-MM-dd").parse(check_out_date);
-        Room room = findRoom(checkin_date, checkout_date, room_type_id);
-
-        if (room == null) {
-            throw new Exception("No room found with this type");
-        }
-
-        Guest currentGuest = guestRepository.findByUsername(username).orElseThrow();
-
-        Reservation newReservation = new Reservation(checkin_date, checkout_date, currentGuest);
-        reservationRepository.save(newReservation);
-
-        return ResponseEntity.ok(newReservation.getReservation_id());
+        Reservation reservation = new Reservation(checkin_date, checkout_date, room, guest);
+        reservationRepository.save(reservation);
+        room.getReservations().add(reservation);
+        roomRepository.save(room);
+        createNewBillings(reservation);
+        return ResponseEntity.ok(reservation.getReservation_id());
     }
+
+//    @PostMapping("/create")
+//    public ResponseEntity<?> createReservation(
+//            @RequestParam String username,
+//            @RequestParam String check_in_date,
+//            @RequestParam String check_out_date,
+//            @RequestParam int room_type_id) throws Exception {
+//        Date checkin_date = new SimpleDateFormat("yyyy-MM-dd").parse(check_in_date);
+//        Date checkout_date = new SimpleDateFormat("yyyy-MM-dd").parse(check_out_date);
+//        Room room = findRoom(checkin_date, checkout_date, room_type_id);
+//
+//        if (room == null) {
+//            throw new Exception("No room found with this type");
+//        }
+//
+//        Guest currentGuest = guestRepository.findByUsername(username).orElseThrow();
+//
+//        Reservation newReservation = new Reservation(checkin_date, checkout_date, currentGuest);
+//        reservationRepository.save(newReservation);
+//
+//        return ResponseEntity.ok(newReservation.getReservation_id());
+//    }
 
     @PostMapping("/{reservation_id}/edit")
     public ResponseEntity<?> editReservation(

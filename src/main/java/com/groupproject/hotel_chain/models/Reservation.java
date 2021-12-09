@@ -2,6 +2,7 @@ package com.groupproject.hotel_chain.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
@@ -24,7 +25,7 @@ public class Reservation {
 
     @ManyToOne
     @JoinColumn(name = "room")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Room room;
 
     public Room getRoom() {
@@ -38,7 +39,7 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "guest_id")
     @JsonProperty(access = JsonProperty.Access.READ_WRITE)
-    @JsonBackReference
+    @JsonManagedReference
     private Guest guest;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -87,9 +88,4 @@ public class Reservation {
         this.guest = guest;
     }
 
-    public Reservation(Date checkin_date, Date checkout_date, Guest guest) {
-        this.checkin_date = checkin_date;
-        this.checkout_date = checkout_date;
-        this.guest = guest;
-    }
 }
