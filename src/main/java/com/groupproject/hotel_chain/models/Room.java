@@ -20,8 +20,8 @@ public class Room {
     @Column
     private int floor;
 
-    @Column(name = "occupied", nullable = false)
-    private boolean occupied;
+    @Column(name = "clean", nullable = false)
+    private boolean clean = true;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToMany
@@ -33,12 +33,12 @@ public class Room {
     @JoinColumn(name = "room_type_id")
     private Room_Type room_type;
 
-    public boolean isOccupied() {
-        return occupied;
+    public boolean getIsClean() {
+        return clean;
     }
 
-    public void setOccupied(boolean occupied) {
-        this.occupied = occupied;
+    public void setClean(boolean clean) {
+        this.clean = clean;
     }
 
     public Set<Reservation> getReservations() {
@@ -84,25 +84,15 @@ public class Room {
     public Room() {
     }
 
-    public Boolean getOccupied() {
-        return occupied;
-    }
-
-    public void setOccupied(Boolean occupied) {
-        this.occupied = occupied;
-    }
-
     public Room(int number, int floor, Room_Type room_type) {
         this.number = number;
         this.floor = floor;
         this.room_type = room_type;
-        this.occupied = false;
     }
 
     public Room(int number, int floor, Room_Type room_type, boolean occupied) {
         this.number = number;
         this.floor = floor;
         this.room_type = room_type;
-        this.occupied = occupied;
     }
 }
