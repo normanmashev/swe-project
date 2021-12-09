@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar target/hotel_chain-0.0.1-SNAPSHOT.war
+web: java -Dserver.port=$PORT $JAVA_OPTS -war target/hotel_chain-0.0.1-SNAPSHOT.war

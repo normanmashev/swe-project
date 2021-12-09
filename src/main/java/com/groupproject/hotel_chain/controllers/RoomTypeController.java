@@ -23,7 +23,7 @@ public class RoomTypeController {
         return ResponseEntity.ok(hotel.getRoomTypes());
     }
 
-    @PostMapping("/add/")
+    @PostMapping("/add")
     public ResponseEntity<?> addRoomType(@RequestParam String name,
                                          @RequestParam int size,
                                          @RequestParam int capacity,
