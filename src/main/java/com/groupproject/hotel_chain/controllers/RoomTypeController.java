@@ -11,13 +11,13 @@ import com.groupproject.hotel_chain.repository.RoomRepository;
 import com.groupproject.hotel_chain.repository.RoomTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/roomtype")
 public class RoomTypeController {
