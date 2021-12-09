@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @CrossOrigin
 @RestController
@@ -23,9 +24,9 @@ public class EmployeeController {
     @GetMapping("/get/all")
     public ResponseEntity<?> getAllEmployees(@RequestParam int hotel_id) {
         Hotel hotel = hotelRepository.findById(hotel_id).orElseThrow();
-        List<Employee> employees = (List<Employee>) hotel.getEmployees();
+        Set<Employee> employees = hotel.getEmployees();
         for (Employee employee : employees) {
-            if (employee.getRole() == "manager") {
+            if (employee.getRole().equals("manager")) {
                 employees.remove(employee);
                 break;
             }
