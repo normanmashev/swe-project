@@ -1,21 +1,34 @@
 package com.groupproject.hotel_chain.controllers;
 
 import com.groupproject.hotel_chain.models.Hotel;
+import com.groupproject.hotel_chain.models.Reservation;
+import com.groupproject.hotel_chain.models.Room;
 import com.groupproject.hotel_chain.models.Room_Type;
+import com.groupproject.hotel_chain.models.dto.HotelRoomTypeDto;
 import com.groupproject.hotel_chain.repository.HotelRepository;
+import com.groupproject.hotel_chain.repository.ReservationRepository;
+import com.groupproject.hotel_chain.repository.RoomRepository;
 import com.groupproject.hotel_chain.repository.RoomTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 @RestController
 @RequestMapping("/api/roomtype")
 public class RoomTypeController {
     @Autowired
-    RoomTypeRepository roomTypeRepository;
+    private RoomTypeRepository roomTypeRepository;
     @Autowired
-    HotelRepository hotelRepository;
+    private HotelRepository hotelRepository;
+    @Autowired
+    private ReservationRepository reservationRepository;
+    @Autowired
+    private RoomRepository roomRepository;
 
     @GetMapping("/get/all/{id}")
     public ResponseEntity<?> getRoomTypesForHotelId(@PathVariable int id) {
@@ -50,5 +63,53 @@ public class RoomTypeController {
         Room_Type room_type = roomTypeRepository.findById(id).orElseThrow();
         roomTypeRepository.delete(room_type);
         return ResponseEntity.ok("");
+    }
+
+    @GetMapping("/find")
+    public ResponseEntity<?> find(@RequestParam String check_in_date,
+                                  @RequestParam String check_out_date,
+                                  @RequestParam int capacity) throws ParseException {
+
+        Date checkin_date = new SimpleDateFormat("yyyy-MM-dd").parse(check_in_date);
+        Date checkout_date = new SimpleDateFormat("yyyy-MM-dd").parse(check_out_date);
+
+        Set<Room_Type> room_Types = new HashSet<Room_Type>();
+        List<Room> rooms = roomRepository.findAll();
+        List<Reservation> reservations = reservationRepository.findAll();
+
+        for (Room room : rooms) {
+            if (room_Types.contains(room.getRoom_type())) {
+                continue;
+            }
+            boolean reserved = false;
+            for (Reservation reservation : room.getReservations()) {
+                if ((checkin_date.after(reservation.getCheckin_date()) && checkin_date.before(reservation.getCheckout_date()))
+                        || (checkout_date.after(reservation.getCheckin_date()) && checkout_date.before(reservation.getCheckout_date()))) {
+                    reserved = true;
+                    break;
+                }
+            }
+            if (!reserved) {
+                room_Types.add(room.getRoom_type());
+            }
+        }
+
+
+        List<HotelRoomTypeDto> hotelRoomTypeDtos = new ArrayList<>();
+        for (Room_Type room_type : room_Types) {
+            HotelRoomTypeDto oldHotelRoomTypeDto = null;
+            for (HotelRoomTypeDto hotelRoomTypeDto : hotelRoomTypeDtos) {
+                if (hotelRoomTypeDto.getHotel() == room_type.getHotel()) {
+                    oldHotelRoomTypeDto = hotelRoomTypeDto;
+                    break;
+                }
+            }
+            if (oldHotelRoomTypeDto == null) {
+                oldHotelRoomTypeDto = new HotelRoomTypeDto(room_type.getHotel());
+                hotelRoomTypeDtos.add(oldHotelRoomTypeDto);
+            }
+            oldHotelRoomTypeDto.addRoom_Type(room_type);
+        }
+        return ResponseEntity.ok(hotelRoomTypeDtos);
     }
 }

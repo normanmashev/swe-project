@@ -28,6 +28,11 @@ public class Room {
     @JoinColumn(name = "reservation")
     Set<Reservation> reservations = new HashSet<>();
 
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "room_type_id")
+    private Room_Type room_type;
+
     public boolean isOccupied() {
         return occupied;
     }
@@ -43,11 +48,6 @@ public class Room {
     public void setReservations(Set<Reservation> reservations) {
         this.reservations = reservations;
     }
-
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "room_type_id")
-    private Room_Type room_type;
 
     public int getId() {
         return id;
