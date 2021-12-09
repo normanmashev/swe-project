@@ -8,6 +8,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -17,8 +18,11 @@ public class HotelController {
     HotelRepository hotelRepository;
 
     @GetMapping("/get/all")
-    public ResponseEntity<?> getHotels() {
+    public ResponseEntity<?> getHotels(@RequestParam(required = false) String city) {
         List<Hotel> hotels = hotelRepository.findAll();
+        if (city != null) {
+            hotels.stream().filter(hotel -> hotel.getAddress() == city).collect(Collectors.toList());
+        }
         return ResponseEntity.ok(hotels);
     }
 
