@@ -15,6 +15,17 @@ public class Room_Type {
     private int room_type_id;
 
     @Column
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Column
     private int size;
 
     @Column
@@ -66,7 +77,8 @@ public class Room_Type {
 
     public Set<Room> getRooms() { return roomSet; }
 
-    public Room_Type(int size, int capacity, Hotel hotel) {
+    public Room_Type(String name, int size, int capacity, Hotel hotel) {
+        this.name = name;
         this.size = size;
         this.capacity = capacity;
         this.hotel = hotel;
