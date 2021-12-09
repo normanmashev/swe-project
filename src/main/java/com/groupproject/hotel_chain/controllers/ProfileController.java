@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping
+@RequestMapping("api/profile")
 public class ProfileController {
     @Autowired
     private BillingRepository billingRepository;

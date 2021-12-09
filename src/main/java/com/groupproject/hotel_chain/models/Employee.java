@@ -2,6 +2,7 @@ package com.groupproject.hotel_chain.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
@@ -25,10 +26,10 @@ public class Employee {
 
     private String role;
 
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "hotel_id")
     @JsonProperty(access = JsonProperty.Access.READ_WRITE)
-    @JsonBackReference
     private Hotel hotel;
 
     public Hotel getHotel() {

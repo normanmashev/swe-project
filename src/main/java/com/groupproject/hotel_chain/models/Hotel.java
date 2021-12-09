@@ -1,5 +1,6 @@
 package com.groupproject.hotel_chain.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -23,6 +24,8 @@ public class Hotel {
     @ElementCollection
     private List<String> phone;
 
+    @JsonBackReference
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
     private Set<Employee> employees = new HashSet<>();
 

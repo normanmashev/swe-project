@@ -47,14 +47,12 @@ public class LoginController {
             return ResponseEntity.badRequest().body("Incorrect Password");
         }
 
-        Optional<Employee> employee = employeeRepository.findByUsername(username);
-        if (employee.isPresent()) {
-            if (passwordEncoder.matches(password, employee.get().getPassword())) {
-                return ResponseEntity.ok(employee);
-            }
+        Employee employee = employeeRepository.findByUsername(username).orElseThrow();
+        if (passwordEncoder.matches(password, employee.getPassword())) {
+            return ResponseEntity.ok(employee);
+        } else {
             return ResponseEntity.badRequest().body("Incorrect Password");
         }
-        return ResponseEntity.badRequest().body("Incorrect Username");
     }
 
     @PostMapping("/signup/guest")
@@ -99,10 +97,10 @@ public class LoginController {
                 name,
                 surname,
                 "manager");
-        employeeRepository.save(employee);
         Hotel hotel = new Hotel(hotelName, address, phones);
         hotelRepository.save(hotel);
         employee.setHotel(hotel);
+        employeeRepository.save(employee);
         return ResponseEntity.ok("Success");
     }
 
