@@ -83,10 +83,9 @@ public class RoomTypeController {
 
         Set<Room_Type> room_Types = new HashSet<Room_Type>();
         List<Room> rooms = roomRepository.findAll();
-        List<Reservation> reservations = reservationRepository.findAll();
 
         for (Room room : rooms) {
-            if (room_Types.contains(room.getRoom_type())) {
+            if (room_Types.contains(room.getRoom_type()) || room.getRoom_type().getCapacity() != capacity) {
                 continue;
             }
             boolean reserved = false;
