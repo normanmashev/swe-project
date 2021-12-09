@@ -25,7 +25,7 @@
 		</v-col>
 		<v-col cols="12" sm="4" md="3">
 			<DatePicker
-				:date.sync="data.dateFrom"
+				:date.sync="data.check_in_date"
 				label="Check-in date"
 				:past-dates="false"
 				solo
@@ -34,7 +34,7 @@
 		</v-col>
 		<v-col cols="12" sm="4" md="3">
 			<DatePicker
-				:date.sync="data.dateTo"
+				:date.sync="data.check_out_date"
 				label="Check-out date"
 				:past-dates="false"
 				solo
@@ -43,7 +43,7 @@
 		</v-col>
 		<v-col cols="12" sm="4" md="3">
 			<v-text-field
-				v-model="data.guestNumber"
+				v-model="data.capacity"
 				type="number"
 				prepend-inner-icon="mdi-account-multiple"
 				label="Number of people"
@@ -52,7 +52,7 @@
 				dense
 			></v-text-field>
 		</v-col>
-		<v-col cols="12" sm="4" md="3">
+		<!-- <v-col cols="12" sm="4" md="3">
 			<v-autocomplete
 				v-model="data.location"
 				prepend-inner-icon="mdi-map-marker"
@@ -61,7 +61,7 @@
 				dense
 				:items="cities"
 			></v-autocomplete>
-		</v-col>
+		</v-col> -->
 	</v-row>
 </template>
 
@@ -73,10 +73,10 @@ export default {
 	data() {
 		return {
 			data: {
-				dateFrom: "",
-				dateTo: "",
-				location: "",
-				guestNumber: null,
+				check_in_date: "",
+				check_out_date: "",
+				// location: "",
+				capacity: null,
 			},
 		};
 	},
@@ -87,16 +87,18 @@ export default {
 
 	methods: {
 		applyFilters() {
-			this.$store.commit("SET_FILTERS", this.data);
+			this.$store.commit("hotels/SET_FILTERS", this.data);
+			this.$store.dispatch("hotels/loadHotels");
 		},
 
 		resetFilters() {
-			this.$store.commit("SET_FILTERS", null);
+			this.$store.commit("hotels/SET_FILTERS", null);
+			this.$store.dispatch("hotels/loadHotels");
 			this.data = {
-				dateFrom: "",
-				dateTo: "",
-				location: "",
-				guestNumber: null,
+				check_in_date: "",
+				check_out_date: "",
+				// location: "",
+				capacity: null,
 			};
 		},
 	},

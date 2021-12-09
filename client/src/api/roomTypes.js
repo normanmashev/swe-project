@@ -1,30 +1,8 @@
 import request from "./request";
 
-export const SignIn = data =>
+export const AddRoomType = params =>
 	request({
-		url: "/signin",
-		method: "post",
-		data,
-	})
-		.then(res => res.data)
-		.catch(e => {
-			throw e;
-		});
-
-export const SignUpGuest = data =>
-	request({
-		url: "/signup/guest",
-		method: "post",
-		data,
-	})
-		.then(res => res.data)
-		.catch(e => {
-			throw e;
-		});
-
-export const SignUpManager = params =>
-	request({
-		url: "/signup/manager",
+		url: "/roomtype/add/",
 		method: "post",
 		params,
 	})
@@ -33,11 +11,30 @@ export const SignUpManager = params =>
 			throw e;
 		});
 
-export const SignUpEmployee = data =>
+export const GetAllRoomTypes = id =>
 	request({
-		url: "/signup/employee",
+		url: `/roomtype/get/all/${id}`,
+		method: "get",
+	})
+		.then(res => res.data)
+		.catch(e => {
+			throw e;
+		});
+
+export const DeleteRoomType = id =>
+	request({
+		url: `/roomtype/delete/${id}`,
 		method: "post",
-		data,
+	})
+		.then(res => res.data)
+		.catch(e => {
+			throw e;
+		});
+export const EditRoomType = params =>
+	request({
+		url: `/roomtype/edit/${params.room_type_id}`,
+		method: "post",
+		params,
 	})
 		.then(res => res.data)
 		.catch(e => {

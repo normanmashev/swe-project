@@ -3,6 +3,7 @@
 		<component :is="`${layout}-layout`">
 			<router-view />
 		</component>
+		<Snackbar ref="snackbar" />
 	</v-app>
 </template>
 
@@ -19,6 +20,10 @@ export default {
 		layout() {
 			return this.$route.meta.layout || "base";
 		},
+	},
+
+	mounted() {
+		this.$root.snackbar = this.$refs.snackbar;
 	},
 };
 </script>

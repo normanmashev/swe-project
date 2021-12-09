@@ -4,7 +4,10 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 
+import "./utils/filters";
 import "./assets/scss/styles.scss";
+
+import "@/utils/objectProperties";
 
 import { VueMaskDirective } from "v-mask";
 

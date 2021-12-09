@@ -117,10 +117,16 @@
 					label="Password"
 					:rules="rules.required"
 				></v-text-field>
+
+				<v-alert v-if="alert" dense :type="alert.type">
+					{{ alert.message }}
+				</v-alert>
 			</v-card-text>
 
 			<v-card-actions class="pa-4 pt-0 d-flex">
-				<v-btn depressed class="primary mr-2">Sign up</v-btn>
+				<v-btn depressed class="primary mr-2" @click="handleSubmit"
+					>Sign up</v-btn
+				>
 				<v-btn
 					depressed
 					text
@@ -142,6 +148,7 @@ export default {
 
 	data() {
 		return {
+			alert: null,
 			id_types: ID_TYPES,
 			rules: RULES,
 			data: {
@@ -171,8 +178,27 @@ export default {
 	},
 
 	methods: {
-		handleSubmit() {
-			this.$store.dispatch("user/login");
+		async handleSubmit() {
+			this.alert = null;
+			try {
+				await this.$store.dispatch("user/signUp", {
+					data: this.data,
+					role: "G",
+				});
+				this.alert = {
+					message:
+						"You are successfully registered! You will be redirected to the login page in a moment..",
+					type: "success",
+				};
+				setTimeout(() => {
+					this.$router.push("/login");
+				}, 2000);
+			} catch (error) {
+				this.alert = {
+					message: "Unexpected error",
+					type: "error",
+				};
+			}
 		},
 	},
 };

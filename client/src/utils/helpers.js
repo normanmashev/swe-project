@@ -16,7 +16,7 @@ export const RULES = {
 };
 
 export const ID_TYPES = [
-	{ text: "Driver license", value: "DRIVER LICENSE" },
+	{ text: "Driver license", value: "DRIVING_LICENSE" },
 	{ text: "Passport", value: "PASSPORT" },
 ];
 
@@ -53,4 +53,49 @@ export const CITIES = [
 	"Shakhtinsk",
 	"Schuchinsk",
 	"Ekibastuz",
+];
+
+export const ROOMTYPES = [
+	"Single",
+	"Double",
+	"Triple",
+	"Quad",
+	"Queen",
+	"King",
+	"Twin",
+	"Hollywood Twin Room",
+	"Double-double",
+	"Studio",
+	"Suite / Executive Suite",
+	"Mini Suite",
+	"President Suite",
+	"Apartments / Room for Extended Stay",
+	"Connecting rooms",
+	"Murphy Room",
+	"Accessible Room / Disabled Room",
+	"Cabana",
+	"Adjoining rooms",
+	"Adjacent rooms",
+	"Villa",
+	"Executive Floor/Floored Room",
+	"Smoking / Non-Smoking Room",
+];
+
+export const DAYS = [
+	"Monday",
+	"Tuesday",
+	"Wednesday",
+	"Thursday",
+	"Friday",
+	"Saturday",
+	"Sunday",
+];
+
+export const ROLES = [
+	"Front Office Attendant",
+	"Guest Services Associate",
+	"Guest Services Supervisor",
+	"Desk Clerk",
+	"Hotel Receptionist",
+	"Reservationist",
 ];

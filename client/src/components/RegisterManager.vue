@@ -42,10 +42,18 @@
 					:rules="rules.required"
 				></v-text-field>
 
+				<v-text-field
+					v-model="data.hotelName"
+					outlined
+					dense
+					label="Hotel name"
+					:rules="rules.required"
+				></v-text-field>
+
 				<v-autocomplete
 					v-model="data.address"
 					prepend-inner-icon="mdi-map-marker"
-					label="Address"
+					label="Hotel address"
 					outlined
 					dense
 					:items="cities"
@@ -69,7 +77,7 @@
 						>
 						</v-text-field>
 						<span v-if="!data.phones.length" class="caption">
-							No phones added
+							No phone added
 						</span>
 						<ul v-else class="d-flex flex-column">
 							<li
@@ -94,10 +102,16 @@
 					dense
 					label="Password"
 				></v-text-field>
+
+				<v-alert v-if="alert" dense :type="alert.type">{{
+					alert.message
+				}}</v-alert>
 			</v-card-text>
 
 			<v-card-actions class="pa-4 pt-0 d-flex">
-				<v-btn depressed class="primary mr-2">Sign up</v-btn>
+				<v-btn depressed class="primary mr-2" @click="handleSubmit"
+					>Sign up</v-btn
+				>
 				<v-btn
 					depressed
 					text
@@ -120,6 +134,7 @@ export default {
 
 	data() {
 		return {
+			alert: null,
 			id_types: ID_TYPES,
 			rules: RULES,
 			phone: "",
@@ -128,7 +143,7 @@ export default {
 				name: "",
 				surname: "",
 				address: "",
-				hotel_name: "",
+				hotelName: "",
 				phones: [],
 				password: "",
 			},
@@ -143,8 +158,27 @@ export default {
 	},
 
 	methods: {
-		handleSubmit() {
-			this.$store.dispatch("user/login");
+		async handleSubmit() {
+			try {
+				const phones = this.data.phones.join(", ");
+				await this.$store.dispatch("user/signUp", {
+					data: { ...this.data, phones },
+					role: "M",
+				});
+				this.alert = {
+					message:
+						"You are successfully registered! You will be redirected to the login page in a moment..",
+					type: "success",
+				};
+				setTimeout(() => {
+					this.$router.push("/login");
+				}, 2000);
+			} catch (error) {
+				this.alert = {
+					message: error.message || "Error",
+					type: "error",
+				};
+			}
 		},
 
 		addPhone() {
@@ -159,8 +193,8 @@ export default {
 		},
 
 		deletePhone(phone) {
-			const index = this.data.phones.findIndex(e => e === phone);
-			this.data.phones.splice(index, 1);
+			const index = this.data.phone.findIndex(e => e === phone);
+			this.data.phone.splice(index, 1);
 		},
 	},
 };

@@ -8,15 +8,10 @@
 			></v-progress-linear>
 		</template>
 
-		<v-img
-			height="250"
-			src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
-		></v-img>
-
-		<v-card-title>Hotel title</v-card-title>
+		<v-card-title>{{ data.name }}</v-card-title>
 
 		<v-card-text>
-			<v-row align="center" class="mx-0 mb-4">
+			<!-- <v-row align="center" class="mx-0 mb-4">
 				<v-rating
 					:value="4.5"
 					color="amber"
@@ -26,52 +21,63 @@
 					size="14"
 				></v-rating>
 
-				<div class="grey--text ms-4">4.5 (413)</div>
-			</v-row>
+				<div class="grey--text ms-4">{{ "" }}</div>
+			</v-row> -->
 
 			<div class="mb-1 text-subtitle-1 d-flex align-items-center">
 				<v-icon class="mr-1" small>mdi-map-marker</v-icon>
-				<span>Country name</span>
+				<span>{{ data.address }}</span>
 			</div>
-			<div class="mb-1 text-subtitle-2 d-flex align-items-center">
+			<div
+				v-for="p of data.phone"
+				:key="p"
+				class="mb-1 text-subtitle-2 d-flex align-items-center"
+			>
 				<v-icon class="mr-1" small>mdi-cellphone</v-icon>
-				<span>+7-700-000-11-22</span>
+				<span>{{ p }}</span>
 			</div>
 
-			<div>
-				Small plates, salads & sandwiches - an intimate setting with 12 indoor
-				seats plus patio seating.
-			</div>
+			<ul v-if="data.roomTypes.length" class="d-flex flex-column">
+				<h6 class="subtitle-1">Room types:</h6>
+				<li v-for="(rt, i) of data.roomTypes" :key="i">
+					<b>{{ rt.name }}</b>
+				</li>
+			</ul>
 		</v-card-text>
 
-		<v-divider class="mx-4"></v-divider>
-
-		<v-card-title>Tonight's availability</v-card-title>
-
-		<v-card-text>
-			<v-chip-group active-class="deep-purple accent-4 white--text" column>
-				<v-chip>5:30PM</v-chip>
-
-				<v-chip>7:30PM</v-chip>
-
-				<v-chip>8:00PM</v-chip>
-
-				<v-chip>9:00PM</v-chip>
-			</v-chip-group>
-		</v-card-text>
-
-		<v-card-actions>
-			<v-btn color="deep-purple lighten-2" text> Reserve </v-btn>
+		<v-card-actions class="d-flex justify-end">
+			<v-btn
+				v-if="role"
+				color="deep-purple lighten-2"
+				text
+				link
+				:to="`/hotel/${data.hotel_id}`"
+			>
+				Reserve
+			</v-btn>
+			<span v-else class="text-grey caption">
+				Authorize into the system in order to book a room in this hotel
+			</span>
 		</v-card-actions>
 	</v-card>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
 	name: "HotelCard",
 
 	props: {
-		data: {},
+		data: {
+			type: Object,
+			required: true,
+		},
+	},
+
+	computed: {
+		...mapGetters({
+			role: "user/getRole",
+		}),
 	},
 };
 </script>
