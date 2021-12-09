@@ -4,11 +4,13 @@ import com.groupproject.hotel_chain.models.Hotel;
 import com.groupproject.hotel_chain.repository.HotelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 public class MainPageController {
     @Autowired

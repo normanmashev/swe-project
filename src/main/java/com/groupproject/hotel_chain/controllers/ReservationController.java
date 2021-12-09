@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.List;
 import java.util.Date;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/reservation")
 public class ReservationController {
