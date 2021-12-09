@@ -10,7 +10,7 @@ import java.util.Set;
 @Table(name = "guest")
 public class Guest {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int guest_id;
 
     @Enumerated(EnumType.STRING)

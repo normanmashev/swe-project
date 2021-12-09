@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Table(name = "billing")
 public class Billing {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int bill_id;
 
     private int amount;

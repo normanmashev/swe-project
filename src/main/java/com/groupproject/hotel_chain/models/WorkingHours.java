@@ -10,7 +10,7 @@ import java.util.Date;
 @Table(name = "working_hours")
 public class WorkingHours {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private Time start_time;
