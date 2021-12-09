@@ -45,7 +45,7 @@ public class RoomTypeController {
                                          @RequestParam int hotel_id,
                                          @RequestParam(required = false) List<Integer> prices) {
         Hotel hotel = hotelRepository.findById(hotel_id).orElseThrow();
-        if (prices.size() != 7) {
+        if (prices == null || prices.size() != 7) {
             prices = defaultPrices;
         }
         Room_Type room_type = new Room_Type(name, size, capacity, hotel, prices);

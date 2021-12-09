@@ -89,10 +89,4 @@ public class Room {
         this.floor = floor;
         this.room_type = room_type;
     }
-
-    public Room(int number, int floor, Room_Type room_type, boolean occupied) {
-        this.number = number;
-        this.floor = floor;
-        this.room_type = room_type;
-    }
 }
