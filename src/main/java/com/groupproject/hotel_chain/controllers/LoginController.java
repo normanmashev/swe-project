@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @CrossOrigin
 @RestController
-@RequestMapping
+@RequestMapping("/api")
 public class LoginController {
     @Autowired
     GuestRepository guestRepository;
