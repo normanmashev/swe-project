@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -85,10 +86,11 @@ public class Room_Type {
 
     public void setPrices(List<Integer> prices) { this.prices = prices; }
 
-    public Room_Type(String name, int size, int capacity, Hotel hotel) {
+    public Room_Type(String name, int size, int capacity, Hotel hotel, List<Integer> prices) {
         this.name = name;
         this.size = size;
         this.capacity = capacity;
         this.hotel = hotel;
+        this.prices = prices;
     }
 }
