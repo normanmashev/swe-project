@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from "@/store";
 
 Vue.use(VueRouter);
 
@@ -12,9 +13,10 @@ const routes = [
 		path: "/home",
 		component: () => import("@/views/Home"),
 		redirect: to => {
-			const role = "";
-			if (!role) return "/home/guest";
-			else return "/home/manager";
+			const role = store.getters["user/getRole"];
+			if (!role || role === "guest") return "/home/guest";
+			else if (role === "manager") return "/home/manager";
+			else return "/home/employee";
 		},
 		children: [
 			{
@@ -31,6 +33,18 @@ const routes = [
 				component: () => import("@/views/HomeManager"),
 				meta: {
 					title: "Home | Manager",
+					requireAuth: true,
+					perm: "manager",
+				},
+			},
+			{
+				path: "employee",
+				name: "HomeEmployee",
+				component: () => import("@/views/HomeEmployee"),
+				meta: {
+					title: "Home | Employee",
+					requireAuth: true,
+					perm: "Desk Clerk",
 				},
 			},
 		],
@@ -63,6 +77,16 @@ const routes = [
 		],
 	},
 	{
+		path: "/hotel/:id",
+		name: "HotelInfo",
+		component: () => import("@/views/HotelInfo"),
+		meta: {
+			title: "Hotel info",
+			requireAuth: true,
+			perm: "guest",
+		},
+	},
+	{
 		path: "/login",
 		name: "Login",
 		component: () => import("@/views/Login"),
@@ -76,6 +100,14 @@ const routes = [
 		component: () => import("@/views/Register"),
 		meta: {
 			title: "Registration",
+		},
+	},
+	{
+		path: "/logout",
+		name: "Logout",
+		component: () => import("@/views/Logout"),
+		meta: {
+			title: "Logout",
 		},
 	},
 	{
@@ -108,7 +140,15 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
 	document.title = to.meta.title;
-	next();
+	const role = store.getters["user/getRole"];
+	const isAuth = store.getters["user/isAuth"];
+	const { requireAuth, perm } = to.meta;
+
+	if ((requireAuth && !isAuth) || (requireAuth && isAuth && role !== perm)) {
+		next("/forbidden");
+	} else {
+		next();
+	}
 });
 
 export default router;

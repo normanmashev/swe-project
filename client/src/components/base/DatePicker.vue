@@ -60,13 +60,8 @@ export default {
 	methods: {
 		handleInput(e) {
 			this.show = false;
-			console.log(e);
 			this.$emit("update:date", e);
 		},
-	},
-
-	created() {
-		console.log(this.$attrs);
 	},
 };
 </script>

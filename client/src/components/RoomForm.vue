@@ -2,28 +2,46 @@
 	<v-form ref="form" lazy-validation @submit.prevent="handleSubmit">
 		<v-row>
 			<v-col cols="12" class="pb-0">
-				<h6 class="text-h6">Add new room type</h6>
+				<h6 class="text-h6">Add new room</h6>
 			</v-col>
 			<v-col cols="12" sm="4">
 				<v-autocomplete
-					v-model="data.size"
+					v-model="data.room_type_id"
+					ref="size"
 					solo
 					dense
-					label="Room type name"
+					label="Room type"
 					validate-on-blur
-					:rules="rules.required"
+					:items="roomTypes"
+					item-text="name"
+					item-value="room_type_id"
+					:rules="requiredRule"
 				></v-autocomplete>
 			</v-col>
-			<v-col cols="12" sm="4">
+			<v-col cols="12" sm="3">
 				<v-text-field
-					v-model="data.capacity"
+					v-model="data.floor"
+					ref="floor"
 					type="number"
 					min="1"
 					solo
 					dense
-					label="Capacity"
+					label="Floor"
+					:rules="[...requiredRule, ...numberRule]"
+				>
+				</v-text-field>
+			</v-col>
+			<v-col cols="12" sm="3">
+				<v-text-field
+					v-model="data.number"
+					ref="floor"
+					type="number"
+					min="1"
+					solo
+					dense
+					label="Number"
 					validate-on-blur
-					:rules="rules.capacity"
+					:rules="[...requiredRule, ...numberRule]"
 				>
 				</v-text-field>
 			</v-col>
@@ -39,12 +57,21 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { RULES } from "@/utils/helpers";
+
 export default {
 	name: "RoomForm",
 
 	data() {
 		return {
-			data: {},
+			rules: RULES,
+			requiredRule: [],
+			numberRule: [],
+			data: {
+				floor: null,
+				room_type_id: null,
+				number: null,
+			},
 		};
 	},
 
@@ -54,8 +81,28 @@ export default {
 		}),
 	},
 
+	watch: {
+		data: {
+			handler(val) {
+				this.resetValidation();
+			},
+			deep: true,
+		},
+	},
+
 	methods: {
-		handleSubmit() {},
+		resetValidation() {
+			this.$refs.form.resetValidation();
+		},
+
+		handleSubmit() {
+			this.$store.dispatch("hotels/addRoom", this.data);
+      this.data = {
+				floor: null,
+				room_type_id: null,
+				number: null,
+			};
+		},
 	},
 
 	beforeCreate() {

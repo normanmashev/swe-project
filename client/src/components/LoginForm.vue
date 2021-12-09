@@ -27,10 +27,13 @@
 					label="Password"
 					:rules="rules.required"
 				></v-text-field>
+				<v-alert v-if="alert" dense :type="alert.type">{{
+					alert.message
+				}}</v-alert>
 			</v-card-text>
 
 			<v-card-actions class="pa-4 pt-0 d-flex justify-space-between">
-				<v-btn depressed color="primary">Login</v-btn>
+				<v-btn depressed color="primary" @click="handleSubmit">Login</v-btn>
 			</v-card-actions>
 		</v-card>
 	</v-form>
@@ -45,6 +48,7 @@ export default {
 	data() {
 		return {
 			rules: RULES,
+			alert: null,
 			data: {
 				username: "",
 				password: "",
@@ -53,8 +57,22 @@ export default {
 	},
 
 	methods: {
-		handleSubmit() {
-			this.$store.dispatch("user/login");
+		async handleSubmit() {
+			this.alert = null;
+			try {
+				await this.$store.dispatch("user/login", this.data);
+				this.alert = {
+					type: "success",
+					message:
+						"Authorization successful! You will be redirected to the home page now..",
+				};
+				setTimeout(() => this.$router.push("/"), 1500);
+			} catch (error) {
+				this.alert = {
+					type: "error",
+					message: error.message || "Error",
+				};
+			}
 		},
 	},
 };

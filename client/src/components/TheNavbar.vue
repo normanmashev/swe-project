@@ -1,7 +1,7 @@
 <template>
 	<v-app-bar app hide-on-scroll color="primary">
 		<v-toolbar-title class="font-weight-bold white--text">
-			<h3>Title</h3>
+			<h3>Pooking</h3>
 		</v-toolbar-title>
 
 		<v-spacer></v-spacer>
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
 	name: "TheNavbar",
 
@@ -35,17 +36,37 @@ export default {
 
 			guestItems: [{ title: "Sign In", to: "/login" }],
 
-			userItems: [{ title: "Profile", to: "/profile" }],
+			userItems: [
+				{ title: "Profile", to: "/profile" },
+				{ title: "Logout", to: "/logout" },
+			],
 
-			managerItems: [{ title: "My hotel", to: "/hotel" }],
-
-			employeeItems: [{}],
+			managerItems: [{ title: "Logout", to: "/logout" }],
 		};
 	},
 
+	computed: {
+		...mapGetters({
+			role: "user/getRole",
+		}),
+	},
+
+	watch: {
+		role() {
+			this.setItems();
+		},
+	},
+
+	methods: {
+		setItems() {
+			if (!this.role) this.menuItems = this.guestItems;
+			else if (this.role === "guest") this.menuItems = this.userItems;
+			else this.menuItems = this.managerItems;
+		},
+	},
+
 	created() {
-		const role = "";
-		if (!role) this.menuItems = this.guestItems;
+		this.setItems();
 	},
 };
 </script>
