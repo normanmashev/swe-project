@@ -11,7 +11,7 @@
 			</thead>
 			<tbody>
 				<tr v-for="item of rooms" :key="item.name">
-					<td>{{ item.roomType }}</td>
+					<td>{{ item.room_type.name }}</td>
 					<td>{{ item.floor }}</td>
 					<td>{{ item.number }}</td>
 					<td>{{ item.isClean ? "Yes" : "No" }}</td>

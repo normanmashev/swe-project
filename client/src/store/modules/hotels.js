@@ -58,7 +58,7 @@ const actions = {
 		try {
 			const user = rootGetters["user/getUser"];
 			const res = await GetAllRooms(user.hotel.hotel_id);
-      console.log(res);
+			console.log(res);
 			commit("SET_ROOMS", res);
 		} catch (error) {
 			throw error;
@@ -107,6 +107,7 @@ const actions = {
 		try {
 			const res = await DeleteRoomType(id);
 			dispatch("loadRoomTypes");
+			dispatch("loadRooms");
 		} catch (error) {
 			throw error;
 		}

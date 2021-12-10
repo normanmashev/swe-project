@@ -193,8 +193,8 @@ export default {
 		},
 
 		deletePhone(phone) {
-			const index = this.data.phone.findIndex(e => e === phone);
-			this.data.phone.splice(index, 1);
+			const index = this.data.phones.findIndex(e => e === phone);
+			this.data.phones.splice(index, 1);
 		},
 	},
 };
