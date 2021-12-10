@@ -156,7 +156,7 @@ public class ReservationController {
             if (curDate.after(checkout_date) || curDate == checkout_date) {
                 throw new Exception("Cannot edit check out date");
             }
-            oldReservation.setCheckin_date(checkout_date);
+            oldReservation.setCheckout_date(checkout_date);
         }
 
         if (room_id != null) {
