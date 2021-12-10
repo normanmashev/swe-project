@@ -43,20 +43,24 @@ export const GetUserReservations = params =>
 			throw e;
 		});
 
-export const DeleteReservation = id =>
+export const DeleteReservation = ({ reservation_id, hotel_id }) =>
 	request({
-		url: `/reservation/${id}/delete`,
+		url: `/reservation/${reservation_id}/delete`,
 		method: "post",
+		params: {
+			hotel_id,
+		},
 	})
 		.then(res => res.data)
 		.catch(e => {
 			throw e;
 		});
 
-export const UpdateReservation = id =>
+export const EditReservation = (reservation_id, params) =>
 	request({
-		url: `/reservation/${id}/edit`,
+		url: `/reservation/${reservation_id}/edit`,
 		method: "post",
+		params,
 	})
 		.then(res => res.data)
 		.catch(e => {
